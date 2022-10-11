@@ -5,9 +5,8 @@ import greenfoot.World;
 
 public class Space extends World {
     public static int level = 1;
-    public static int score = 0;
     public static int animationTimer = 10;
-
+    public static int score = 0;
     public Space() {
         super(800, 600, 1);
         startGame();
@@ -22,6 +21,11 @@ public class Space extends World {
                 addObject(new Alien(), 100 + (c * 70), 100 + (r * 70));
             }
         }
+        score = 0;
+    }
+
+    public void addScore(int points) {
+        score += points;
     }
 
     private void generateBackground() {

@@ -34,10 +34,12 @@ public class Alien extends Actor {
     }
 
     public void isHit(){
+        Space space = (Space) getWorld();
         if (isTouching(Bullet.class)){
             removeTouching(Bullet.class);
             spawnUpgrade();
-            getWorld().removeObject(this);
+            space.addScore(10);
+            space.removeObject(this);
         }
     }
 
