@@ -69,7 +69,7 @@ public class UI extends Actor {
             if (heartAnimationFrame > 3) {
                 heartAnimationFrame = 0;
             }
-            if (shieldAnimationFrame > 8) {
+            if (shieldAnimationFrame > 7) {
                 shieldAnimationFrame = 0;
             }
         }

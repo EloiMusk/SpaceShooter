@@ -3,17 +3,13 @@ import greenfoot.GreenfootImage;
 
 public class Bullet extends Actor {
     public int damage = 1;
+    public int speed = 8;
+    public int bulletType = 1;
+    public int size = 20;
 
     public Bullet() {
-        damage = 1;
-        setImage("Bullet/" + damage + "/0.png");
-        getImage().scale(20, 20);
-    }
-
-    public Bullet(int damage) {
-        this.damage = damage;
-        setImage("Bullet/" + damage + "/0.png");
-        getImage().scale(20, 20);
+        setImage("Bullet/" + bulletType + "/0.png");
+        getImage().scale(size, size);
     }
 
     private int animationFrame = 0;
@@ -23,8 +19,8 @@ public class Bullet extends Actor {
             if (animationFrame > 2) {
                 animationFrame = 0;
             }
-            GreenfootImage frame = new GreenfootImage("Bullet/" + damage + "/" + animationFrame + ".png");
-            frame.scale(20, 20);
+            GreenfootImage frame = new GreenfootImage("Bullet/" + bulletType + "/" + animationFrame + ".png");
+            frame.scale(size, size);
             setImage(frame);
             animationFrame++;
         }
@@ -38,7 +34,7 @@ public class Bullet extends Actor {
 
 
     public void act() {
-        setLocation(getX(), getY() - 8);
+        setLocation(getX(), getY() - speed);
         animation();
         checkSurroundings();
     }

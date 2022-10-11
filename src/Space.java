@@ -30,7 +30,8 @@ public class Space extends World {
 
     private void generateBackground() {
         setPaintOrder(UI.class, SpaceShip.class, Alien.class, Bullet.class);
-        GreenfootImage background = new GreenfootImage("Background/" + level + ".png");
+//        GreenfootImage background = new GreenfootImage("Background/" + level + ".png");
+        GreenfootImage background = new GreenfootImage("Background/" + (Greenfoot.getRandomNumber(1) + 1) + ".png");
         background.scale(800, 600);
         setBackground(background);
         for (int i = 0; i < 30; i++) {
