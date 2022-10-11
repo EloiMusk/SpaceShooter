@@ -24,10 +24,11 @@ public class Space extends World
     }
 
     private void generateBackground(){
+        setPaintOrder(SpaceShip.class, Alien.class, Bullet.class);
         GreenfootImage background = new GreenfootImage("Background/" + level + ".png");;
         background.scale(800, 600);
         setBackground(background);
-        for (int i = 0; i < 100; i++) {
+        for (int i = 0; i < 30; i++) {
             addObject(new Star(), Greenfoot.getRandomNumber(800), Greenfoot.getRandomNumber(600));
         }
     }

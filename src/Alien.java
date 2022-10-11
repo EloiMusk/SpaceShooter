@@ -1,4 +1,5 @@
 import greenfoot.Actor;
+import greenfoot.Greenfoot;
 
 public class Alien extends Actor {
     private int animationFrame = 0;
@@ -26,9 +27,16 @@ public class Alien extends Actor {
         }
     }
 
+    public void spawnUpgrade() {
+        if (Greenfoot.getRandomNumber(100) < 10) {
+            getWorld().addObject(new Upgrade(), getX(), getY());
+        }
+    }
+
     public void isHit(){
         if (isTouching(Bullet.class)){
             removeTouching(Bullet.class);
+            spawnUpgrade();
             getWorld().removeObject(this);
         }
     }
