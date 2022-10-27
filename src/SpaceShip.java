@@ -9,15 +9,15 @@ public class SpaceShip extends Actor {
     private boolean isShooting = false;
     private int movementSpeed = 0;
     private int bulletCount = 1;
-    private int bulletSpeed = 8;
-    private int bulletDamage = 1;
-    private int bulletSize = 20;
-    private int bulletType = 1;
+    private float bulletSpeedBoost = 1;
+    private float bulletDamageBoost = 1;
+    private float bulletSizeBoost = 1;
+    private int bulletType = 2;
 
     public SpaceShip() {
 
         setImage("SpaceShip/SpaceShip0.png");
-        getImage().scale(64,64);
+        getImage().scale(64, 64);
     }
 
     private void animation() {
@@ -26,7 +26,7 @@ public class SpaceShip extends Actor {
                 animationFrame = 0;
             }
             setImage("SpaceShip/SpaceShip" + animationFrame + ".png");
-            getImage().scale(64,64);
+            getImage().scale(64, 64);
             animationFrame++;
         }
     }
@@ -48,9 +48,9 @@ public class SpaceShip extends Actor {
             if (this.ammunition > 0) {
                 for (int i = 0; i < this.bulletCount; i++) {
                     Bullet bullet = new Bullet(bulletType);
-                    bullet.speed = this.bulletSpeed;
-                    bullet.damage = this.bulletDamage;
-                    bullet.size = this.bulletSize;
+                    bullet.speedBoost = this.bulletSpeedBoost;
+                    bullet.damageBoost = this.bulletDamageBoost;
+                    bullet.sizeBoost = this.bulletSizeBoost;
                     getWorld().addObject(bullet, getX(), getY() - 60 + (i * 20));
                 }
                 isShooting = true;
@@ -100,13 +100,13 @@ public class SpaceShip extends Actor {
                     this.bulletCount += 2;
                     break;
                 case BULLET_SPEED:
-                    this.bulletSpeed += 5;
+                    this.bulletSpeedBoost += 5;
                     break;
                 case BULLET_DAMAGE:
-                    this.bulletDamage += 1;
+                    this.bulletDamageBoost += 100;
                     break;
                 case BULLET_SIZE:
-                    this.bulletSize += 5;
+                    this.bulletSizeBoost += 5;
                     break;
                 case ROCKET:
                     this.bulletType = 2;
@@ -135,8 +135,7 @@ public class SpaceShip extends Actor {
 
     private void coolDown() {
         if (Space.animationTimer == 0) {
-
-            if (Greenfoot.getRandomNumber(100) < 8) {
+            if (Greenfoot.getRandomNumber(100) < 20) {
                 if (this.ammunition < 40) {
                     this.ammunition++;
                 }
@@ -150,14 +149,14 @@ public class SpaceShip extends Actor {
                 if (bulletCount > 1) {
                     bulletCount--;
                 }
-                if (bulletSpeed > 8) {
-                    bulletSpeed--;
+                if (bulletSpeedBoost > 1) {
+                    bulletSpeedBoost -= 0.1;
                 }
-                if (bulletDamage > 1) {
-                    bulletDamage--;
+                if (bulletDamageBoost > 1) {
+                    bulletDamageBoost -= 0.1;
                 }
-                if (bulletSize > 20) {
-                    bulletSize--;
+                if (bulletSizeBoost > 1) {
+                    bulletSizeBoost -= 0.1;
                 }
             }
         }
