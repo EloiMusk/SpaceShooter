@@ -7,8 +7,10 @@ public class Bullet extends Actor {
     public int bulletType = 1;
     public int size = 20;
     private int animationFrame = 0;
-
-
+    private int explosionFrame = 0;
+    private boolean exploded = false;
+    private boolean isExploding = false;
+    private int maxExplosionFrame = 10;
     public Bullet() {
         setImage("Bullet/" + bulletType + "/0.png");
         getImage().scale(size, size);
@@ -34,6 +36,20 @@ public class Bullet extends Actor {
     private void checkSurroundings() {
         if (isAtEdge()) {
             getWorld().removeObject(this);
+        }
+    }
+
+    private void explode(){
+        if (Space.animationTimer == 1) {
+            if (explosionFrame > maxExplosionFrame) {
+                explosionFrame = 0;
+                isExploding = false;
+                exploded = true;
+            }
+            GreenfootImage frame = new GreenfootImage("Bullet/" + bulletType + "/explosion/" + explosionFrame + ".png");
+            frame.scale(size, size);
+            setImage(frame);
+            explosionFrame++;
         }
     }
 
