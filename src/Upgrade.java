@@ -7,11 +7,11 @@ public class Upgrade extends Actor {
 
     public Upgrade() {
         int random = Greenfoot.getRandomNumber(100);
-        if (random < 30){
+        if (random < 30) {
             this.upgradeType = UpgradeType.values()[Greenfoot.getRandomNumber(1)];
-        } else if (random < 50){
+        } else if (random < 50) {
             this.upgradeType = UpgradeType.values()[Greenfoot.getRandomNumber(6)];
-        }else {
+        } else {
             this.upgradeType = UpgradeType.values()[Greenfoot.getRandomNumber(UpgradeType.values().length - 1)];
         }
         setImage("Upgrade/" + this.upgradeType.ordinal() + "/0.png");
