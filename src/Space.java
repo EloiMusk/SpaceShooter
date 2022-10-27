@@ -2,7 +2,6 @@ import greenfoot.Greenfoot;
 import greenfoot.GreenfootImage;
 import greenfoot.World;
 
-
 public class Space extends World {
     public static int level = 1;
     public static int animationTimer = 10;
@@ -11,7 +10,6 @@ public class Space extends World {
         super(800, 600, 1);
         startGame();
     }
-
     public void startGame() {
         addObject(new UI(), 400, 300);
         generateBackground();
@@ -23,22 +21,19 @@ public class Space extends World {
         }
         score = 0;
     }
-
     public void addScore(int points) {
         score += points;
     }
-
     private void generateBackground() {
         setPaintOrder(UI.class, SpaceShip.class, Alien.class, Bullet.class);
 //        GreenfootImage background = new GreenfootImage("Background/" + level + ".png");
         GreenfootImage background = new GreenfootImage("Background/" + (Greenfoot.getRandomNumber(1) + 1) + ".png");
         background.scale(800, 600);
         setBackground(background);
-        for (int i = 0; i < 30; i++) {
+        for (int i = 0; i < 10; i++) {
             addObject(new Star(), Greenfoot.getRandomNumber(800), Greenfoot.getRandomNumber(600));
         }
     }
-
     private void runAnimationTimer() {
         if (animationTimer > 0) {
             animationTimer--;
@@ -46,11 +41,9 @@ public class Space extends World {
             animationTimer = 10;
         }
     }
-
     public static void gameOver() {
         Greenfoot.setWorld(new Menu(GameState.GAME_OVER));
     }
-
     public void refreshGameStats() {
         if (getObjects(Alien.class).size() == 0) {
             level++;
@@ -62,13 +55,11 @@ public class Space extends World {
             }
         }
     }
-
     public void gemerateAmmunition() {
         if (Greenfoot.getRandomNumber(150) < 1) {
             addObject(new Ammunition(), Greenfoot.getRandomNumber(800), 0);
         }
     }
-
     public void act() {
         refreshGameStats();
         runAnimationTimer();

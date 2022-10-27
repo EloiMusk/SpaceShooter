@@ -6,14 +6,19 @@ public class Bullet extends Actor {
     public int speed = 8;
     public int bulletType = 1;
     public int size = 20;
+    private int animationFrame = 0;
+
 
     public Bullet() {
         setImage("Bullet/" + bulletType + "/0.png");
         getImage().scale(size, size);
     }
 
-    private int animationFrame = 0;
-
+    public Bullet(int type) {
+        this.bulletType = type;
+        setImage("Bullet/" + bulletType + "/0.png");
+        getImage().scale(size, size);
+    }
     private void animation() {
         if (Space.animationTimer == 1) {
             if (animationFrame > 2) {

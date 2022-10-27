@@ -12,7 +12,7 @@ public class SpaceShip extends Actor {
     private int bulletSpeed = 8;
     private int bulletDamage = 1;
     private int bulletSize = 20;
-    private int bulletType;
+    private int bulletType = 1;
 
     public SpaceShip() {
 
@@ -47,7 +47,7 @@ public class SpaceShip extends Actor {
         if (Greenfoot.isKeyDown("space") && !isShooting) {
             if (this.ammunition > 0) {
                 for (int i = 0; i < this.bulletCount; i++) {
-                    Bullet bullet = new Bullet();
+                    Bullet bullet = new Bullet(bulletType);
                     bullet.speed = this.bulletSpeed;
                     bullet.damage = this.bulletDamage;
                     bullet.size = this.bulletSize;
@@ -107,6 +107,18 @@ public class SpaceShip extends Actor {
                     break;
                 case BULLET_SIZE:
                     this.bulletSize += 5;
+                    break;
+                case ROCKET:
+                    this.bulletType = 2;
+                    break;
+                case BOMB:
+                    this.bulletType = 3;
+                    break;
+                case MISSILE:
+                    this.bulletType = 4;
+                    break;
+                case NUKE:
+                    this.bulletType = 5;
                     break;
             }
             getWorld().removeObject(upgrade);

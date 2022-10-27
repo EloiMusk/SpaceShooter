@@ -7,7 +7,6 @@ public enum UpgradeType {
     BULLET_DAMAGE,
     BULLET_SIZE,
     ROCKET,
-    LASER,
     BOMB,
     MISSILE,
     NUKE
