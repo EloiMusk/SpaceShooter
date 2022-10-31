@@ -25,6 +25,16 @@ public class Bullet extends Actor {
         setImage("Bullet/" + bulletType + "/0.png");
         getImage().scale(size, size);
     }
+    public Bullet(int type, boolean alien) {
+        if (alien) {
+            bulletDirection = -1;
+            isPlayerBullet = false;
+        }
+        this.bulletType = type;
+        setImage("Bullet/" + bulletType + "/0.png");
+        getImage().scale(size, size);
+        init();
+    }
 
     private void init() {
 //                TODO: Migrate to use int instead of Float for boosters
@@ -85,7 +95,7 @@ public class Bullet extends Actor {
         if (isExploding && (Space.animationMilliSeconds * 10) % 30 == 0) {
             explode();
         } else if (!isExploding) {
-            setLocation(getX(), getY() - speed);
+            setLocation(getX(), getY() - (speed * bulletDirection));
             animation();
             checkSurroundings();
         }

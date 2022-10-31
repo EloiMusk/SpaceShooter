@@ -75,6 +75,19 @@ public class SpaceShip extends Actor {
                 this.health--;
             }
         }
+        if (isTouching(Bullet.class)){
+            Bullet bullet = (Bullet) getOneIntersectingObject(Bullet.class);
+            if (!bullet.isPlayerBullet){
+                if (!bullet.isExploding) {
+                    bullet.startExplosion();
+                    if (this.shield > 0) {
+                        this.shield--;
+                    } else {
+                        this.health--;
+                    }
+                }
+            }
+        }
         if (this.health <= 0) {
             Space.gameOver();
         }
