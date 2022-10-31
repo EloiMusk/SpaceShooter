@@ -8,8 +8,9 @@ public class Alien extends Actor {
     private int difficulty = 2;
     public int health;
     public int maxHealth;
-//    private int variant = Greenfoot.getRandomNumber(0);
+    //    private int variant = Greenfoot.getRandomNumber(0);
     private int variant = 1;
+
     public Alien() {
         this.health = this.difficulty * 100;
         this.maxHealth = this.difficulty * 100;
@@ -27,9 +28,9 @@ public class Alien extends Actor {
 
     private GreenfootImage getFrame(int frame) {
         GreenfootImage image = new GreenfootImage("Alien/" + variant + "/" + String.format("%02d", frame) + ".png");
-        image.setColor(new Color(255, 255-difficulty, 255-difficulty));
+        image.setColor(new Color(255, 255 - difficulty, 255 - difficulty));
         image.setFont(image.getFont().deriveFont(100));
-        image.drawString("lvl."+difficulty, 100, 100);
+        image.drawString("lvl." + difficulty, 100, 100);
         image.setColor(Color.WHITE);
         image.fillRect(120, 300, 150, 20);
         image.setColor(Color.RED);
@@ -37,11 +38,11 @@ public class Alien extends Actor {
         return image;
     }
 
-    private GreenfootImage getFrame(){
+    private GreenfootImage getFrame() {
         GreenfootImage image = new GreenfootImage("Alien/" + variant + "/00.png");
-        image.setColor(new Color(255, 255-difficulty, 255-difficulty));
+        image.setColor(new Color(255, 255 - difficulty, 255 - difficulty));
         image.setFont(image.getFont().deriveFont(100));
-        image.drawString("lvl."+difficulty, 100, 100);
+        image.drawString("lvl." + difficulty, 100, 100);
         image.setColor(Color.WHITE);
         image.fillRect(120, 300, 150, 20);
         image.setColor(Color.RED);
@@ -74,25 +75,35 @@ public class Alien extends Actor {
         Space space = (Space) getWorld();
         if (isTouching(Bullet.class)) {
             Bullet bullet = (Bullet) getOneIntersectingObject(Bullet.class);
-            if (!bullet.isExploding) {
-                System.out.println("deal initial damage: " + bullet.damage);
-                health -= bullet.damage;
-                bullet.startExplosion();
+            if (bullet.isPlayerBullet) {
+                if (!bullet.isExploding) {
+                    System.out.println("deal initial damage: " + bullet.damage);
+                    health -= bullet.damage;
+                    bullet.startExplosion();
+                }
+                if (bullet.dealDamage) {
+                    System.out.println("deal explosion damage: " + bullet.damage);
+                    health -= bullet.damage;
+                }
+                if (isDead()) {
+                    space.addScore(10 * difficulty);
+                    spawnUpgrade();
+                    space.removeObject(this);
+                }
             }
-            if (bullet.dealDamage){
-                System.out.println("deal explosion damage: " + bullet.damage);
-                health -= bullet.damage;
-            }
-            if (isDead()) {
-                space.addScore(10 * difficulty);
-                spawnUpgrade();
-                space.removeObject(this);
-            }
+        }
+    }
+
+    private void shoot() {
+//        FIXME: Needs Balancing
+        if ( Space.animationTimer == Greenfoot.getRandomNumber(10) && Greenfoot.getRandomNumber(1000) <= difficulty) {
+            getWorld().addObject(new Bullet(1, true), getX(), getY());
         }
     }
 
     public void act() {
         animation();
         isHit();
+        shoot();
     }
 }

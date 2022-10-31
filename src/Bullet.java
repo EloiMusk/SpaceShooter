@@ -35,7 +35,8 @@ public class Bullet extends Actor {
     private int maxExplosionFrame = 6;
     private int explosionSize = 20;
     public boolean dealDamage = false;
-
+    private int bulletDirection = 1;
+    public boolean isPlayerBullet = true;
     private final BulletData[] bulletData = {
 //            Bullet type 1 (Default)
             new BulletData(8, 100, 15, 30, 50, 6),
@@ -56,6 +57,16 @@ public class Bullet extends Actor {
 //    }
 
     public Bullet(int type) {
+        this.bulletType = type;
+        setImage("Bullet/" + bulletType + "/0.png");
+        getImage().scale(size, size);
+        init();
+    }
+    public Bullet(int type, boolean alien) {
+        if (alien) {
+            bulletDirection = -1;
+            isPlayerBullet = false;
+        }
         this.bulletType = type;
         setImage("Bullet/" + bulletType + "/0.png");
         getImage().scale(size, size);
@@ -120,7 +131,7 @@ public class Bullet extends Actor {
         if (isExploding && (Space.animationTimer * 10) % 30 == 0) {
             explode();
         } else if (!isExploding) {
-            setLocation(getX(), getY() - speed);
+            setLocation(getX(), getY() - (speed * bulletDirection));
             animation();
             checkSurroundings();
         }
