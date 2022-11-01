@@ -77,12 +77,10 @@ public class Alien extends Actor {
             Bullet bullet = (Bullet) getOneIntersectingObject(Bullet.class);
             if (bullet.isPlayerBullet) {
                 if (!bullet.isExploding) {
-                    System.out.println("deal initial damage: " + bullet.damage);
                     health -= bullet.damage;
                     bullet.startExplosion();
                 }
                 if (bullet.dealDamage) {
-                    System.out.println("deal explosion damage: " + bullet.damage);
                     health -= bullet.damage;
                 }
                 if (isDead()) {
@@ -95,8 +93,7 @@ public class Alien extends Actor {
     }
 
     private void shoot() {
-//        FIXME: Needs Balancing
-        if ( Space.animationTimer == Greenfoot.getRandomNumber(10) && Greenfoot.getRandomNumber(1000) <= difficulty) {
+        if ( Space.animationMilliSeconds%2 == 0 && Greenfoot.getRandomNumber(1000) < difficulty) {
             getWorld().addObject(new Bullet(1, true), getX(), getY());
         }
     }

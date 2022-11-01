@@ -18,6 +18,8 @@ public class Bullet extends Actor {
     private int maxExplosionFrame = 6;
     private int explosionSize = 20;
     public boolean dealDamage = false;
+    private int bulletDirection = 1;
+    public boolean isPlayerBullet = true;
 
     public Bullet(int type) {
         this.bulletType = type;
@@ -25,16 +27,7 @@ public class Bullet extends Actor {
         setImage("Bullet/" + bulletType + "/0.png");
         getImage().scale(size, size);
     }
-    public Bullet(int type, boolean alien) {
-        if (alien) {
-            bulletDirection = -1;
-            isPlayerBullet = false;
-        }
-        this.bulletType = type;
-        setImage("Bullet/" + bulletType + "/0.png");
-        getImage().scale(size, size);
-        init();
-    }
+
     public Bullet(int type, boolean alien) {
         if (alien) {
             bulletDirection = -1;
