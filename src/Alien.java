@@ -14,7 +14,7 @@ public class Alien extends Actor {
     public Alien() {
         this.health = this.difficulty * 100;
         this.maxHealth = this.difficulty * 100;
-        setImage(getFrame());
+        setImage(getFrame(0));
         getImage().scale(50, 50);
     }
 
@@ -22,7 +22,7 @@ public class Alien extends Actor {
         this.difficulty = difficulty;
         this.health = this.difficulty * 100;
         this.maxHealth = this.difficulty * 100;
-        setImage(getFrame());
+        setImage(getFrame(0));
         getImage().scale(50, 50);
     }
 
@@ -38,20 +38,8 @@ public class Alien extends Actor {
         return image;
     }
 
-    private GreenfootImage getFrame() {
-        GreenfootImage image = new GreenfootImage("Alien/" + variant + "/00.png");
-        image.setColor(new Color(255, 255 - difficulty, 255 - difficulty));
-        image.setFont(image.getFont().deriveFont(100));
-        image.drawString("lvl." + difficulty, 100, 100);
-        image.setColor(Color.WHITE);
-        image.fillRect(120, 300, 150, 20);
-        image.setColor(Color.RED);
-        image.fillRect(120, 300, (int) (150 * ((double) health / (double) maxHealth)), 20);
-        return image;
-    }
-
     private void animation() {
-        if (Space.animationMilliSeconds % 2 == 0) {
+        if ((Space.animationMilliSeconds * 10) % 30 == 0)  {
             if (animationFrame >= 29) {
                 animationFrame = 0;
             }

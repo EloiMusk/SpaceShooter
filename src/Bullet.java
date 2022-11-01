@@ -1,4 +1,5 @@
 import greenfoot.Actor;
+import greenfoot.Greenfoot;
 import greenfoot.GreenfootImage;
 
 import java.util.List;
@@ -46,6 +47,11 @@ public class Bullet extends Actor {
 
     private void init() {
 //                TODO: Migrate to use int instead of Float for boosters
+        if (isPlayerBullet) {
+            Greenfoot.playSound("Bullet/" + bulletType + "/blast/" + (Greenfoot.getRandomNumber(3) + 1) + ".wav");
+        }else {
+            Greenfoot.playSound("Alien/blast/" + (Greenfoot.getRandomNumber(3) + 1) + ".wav");
+        }
         setRotation(-90);
         damage = (int) (BulletData.bullets[bulletType - 1].damage / damageBoost);
         speed = (int) (BulletData.bullets[bulletType - 1].speed / speedBoost);
@@ -57,7 +63,7 @@ public class Bullet extends Actor {
     }
 
     private void animation() {
-        if (Space.animationMilliSeconds == 1) {
+        if ((Space.animationMilliSeconds * 10) % 30 == 0) {
             if (animationFrame > 2) {
                 animationFrame = 0;
             }
@@ -96,6 +102,7 @@ public class Bullet extends Actor {
             frame = new GreenfootImage("Bullet/" + bulletType + "/explosion/" + explosionFrame + ".png");
         }
         frame.scale(explosionSize, explosionSize);
+        frame.rotate(90);
         setImage(frame);
         explosionFrame++;
     }
