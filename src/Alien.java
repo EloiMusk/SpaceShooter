@@ -50,7 +50,7 @@ public class Alien extends Actor {
     }
 
     private void animation() {
-        if (Space.animationTimer % 2 == 0) {
+        if (Space.animationMilliSeconds % 2 == 0) {
             if (animationFrame >= 29) {
                 animationFrame = 0;
             }
@@ -75,12 +75,10 @@ public class Alien extends Actor {
         if (isTouching(Bullet.class)) {
             Bullet bullet = (Bullet) getOneIntersectingObject(Bullet.class);
             if (!bullet.isExploding) {
-                System.out.println("deal initial damage: " + bullet.damage);
                 health -= bullet.damage;
                 bullet.startExplosion();
             }
             if (bullet.dealDamage){
-                System.out.println("deal explosion damage: " + bullet.damage);
                 health -= bullet.damage;
             }
             if (isDead()) {

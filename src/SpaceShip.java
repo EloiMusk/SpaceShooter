@@ -12,7 +12,8 @@ public class SpaceShip extends Actor {
     private float bulletSpeedBoost = 1;
     private float bulletDamageBoost = 1;
     private float bulletSizeBoost = 1;
-    private int bulletType = 2;
+    private int bulletType = 1;
+    private int bulletCoolDown = 0;
 
     public SpaceShip() {
 
@@ -21,7 +22,7 @@ public class SpaceShip extends Actor {
     }
 
     private void animation() {
-        if (Space.animationTimer == 1) {
+        if (Space.animationMilliSeconds == 1) {
             if (animationFrame > 2) {
                 animationFrame = 0;
             }
@@ -110,15 +111,19 @@ public class SpaceShip extends Actor {
                     break;
                 case ROCKET:
                     this.bulletType = 2;
+                    this.bulletCoolDown = 0;
                     break;
                 case BOMB:
                     this.bulletType = 3;
+                    this.bulletCoolDown = 0;
                     break;
                 case MISSILE:
                     this.bulletType = 4;
+                    this.bulletCoolDown = 0;
                     break;
                 case NUKE:
                     this.bulletType = 5;
+                    this.bulletCoolDown = 0;
                     break;
             }
             getWorld().removeObject(upgrade);
@@ -134,32 +139,41 @@ public class SpaceShip extends Actor {
     }
 
     private void coolDown() {
-        if (Space.animationTimer == 0) {
-            if (Greenfoot.getRandomNumber(100) < 20) {
-                if (this.ammunition < 40) {
-                    this.ammunition++;
-                }
-            }
-            if (Greenfoot.getRandomNumber(100) % 2 == 0) {
-                if (movementSpeed > 0) {
-                    movementSpeed--;
-                }
-            }
-            if (Greenfoot.getRandomNumber(100) < 10) {
-                if (bulletCount > 1) {
-                    bulletCount--;
-                }
-                if (bulletSpeedBoost > 1) {
-                    bulletSpeedBoost -= 0.1;
-                }
-                if (bulletDamageBoost > 1) {
-                    bulletDamageBoost -= 0.1;
-                }
-                if (bulletSizeBoost > 1) {
-                    bulletSizeBoost -= 0.1;
-                }
+//      Every 1.6s and a bit seconds
+        if (Space.animationSeconds % 100 == 0) {
+            if (this.ammunition < 40) {
+                this.ammunition++;
             }
         }
+//        Every 500 or something milliseconds
+        if (Space.animationSeconds % 40 == 0) {
+            if (movementSpeed > 0) {
+                movementSpeed--;
+            }
+        }
+        if (Space.animationSeconds % 50 == 0) {
+            if (bulletCount > 1) {
+                bulletCount--;
+            }
+            if (bulletSpeedBoost > 1) {
+                bulletSpeedBoost -= 0.1;
+            }
+            if (bulletDamageBoost > 1) {
+                bulletDamageBoost -= 0.1;
+            }
+            if (bulletSizeBoost > 1) {
+                bulletSizeBoost -= 0.1;
+            }
+        }
+        if (Space.animationSeconds % 60 == 0 && bulletType > 1) {
+            if (bulletCoolDown >= BulletData.getBullet(bulletType).coolDown) {
+                bulletCoolDown = 0;
+                bulletType = 1;
+            } else {
+                bulletCoolDown++;
+            }
+        }
+
     }
 
     public void act() {

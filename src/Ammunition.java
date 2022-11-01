@@ -8,7 +8,7 @@ public class Ammunition extends Actor {
     }
 
     private void animate() {
-        if (Space.animationTimer % 2 == 0) {
+        if (Space.animationMilliSeconds % 2 == 0) {
             if (animationFrame >= 34) {
                 animationFrame = 0;
             }

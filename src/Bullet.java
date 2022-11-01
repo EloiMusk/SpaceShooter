@@ -2,24 +2,7 @@ import greenfoot.Actor;
 import greenfoot.GreenfootImage;
 
 public class Bullet extends Actor {
-    private static class BulletData {
-        int speed;
-        int damage;
-        int size;
-        int explosionSize;
-        int explosionDamage;
-        int explosionAnimatonFrameCount;
-
-        public BulletData(int speed, int damage, int size, int explosionSize, int explosionDamage, int explosionAnimatonFrameCount) {
-            this.speed = speed;
-            this.damage = damage;
-            this.size = size;
-            this.explosionSize = explosionSize;
-            this.explosionDamage = explosionDamage;
-            this.explosionAnimatonFrameCount = explosionAnimatonFrameCount;
-        }
-    }
-
+    private int delay;
     public float damageBoost = 1;
     public int damage = 100;
     public int explosionDamage = 50;
@@ -36,43 +19,26 @@ public class Bullet extends Actor {
     private int explosionSize = 20;
     public boolean dealDamage = false;
 
-    private final BulletData[] bulletData = {
-//            Bullet type 1 (Default)
-            new BulletData(8, 100, 15, 30, 50, 6),
-//            Bullet type 2 (Rocket)
-            new BulletData(10, 150, 50, 50, 100, 16),
-//            Bullet type 3 (Bomb)
-            new BulletData(7, 20, 20, 40, 300, 15),
-//            Bullet type 4 (Missile)
-            new BulletData(6, 20, 80, 80, 200, 30),
-//            Bullet type 5 (Nuke)
-            new BulletData(5, 20, 90, 90, 200, 23)
-    };
-
-//    public Bullet() {
-//        setImage("Bullet/" + bulletType + "/0.png");
-//        getImage().scale(size, size);
-//        init();
-//    }
-
     public Bullet(int type) {
         this.bulletType = type;
+        init();
         setImage("Bullet/" + bulletType + "/0.png");
         getImage().scale(size, size);
-        init();
     }
 
     private void init() {
-        damage = (int) (bulletData[bulletType - 1].damage * damageBoost);
-        speed = (int) (bulletData[bulletType - 1].speed * speedBoost);
-        size = (int) (bulletData[bulletType - 1].size * sizeBoost);
-        explosionSize = bulletData[bulletType - 1].explosionSize;
-        explosionDamage = (int) (bulletData[bulletType - 1].explosionDamage * damageBoost);
-        maxExplosionFrame = bulletData[bulletType - 1].explosionAnimatonFrameCount;
+//                TODO: Migrate to use int instead of Float for boosters
+        damage = (int) (BulletData.bullets[bulletType - 1].damage / damageBoost);
+        speed = (int) (BulletData.bullets[bulletType - 1].speed / speedBoost);
+        size = (int) (BulletData.bullets[bulletType - 1].size / sizeBoost);
+        explosionSize = BulletData.bullets[bulletType - 1].explosionSize;
+        explosionDamage = (int) (BulletData.bullets[bulletType - 1].explosionDamage / damageBoost);
+        maxExplosionFrame = BulletData.bullets[bulletType - 1].explosionAnimatonFrameCount;
+        delay = BulletData.bullets[bulletType - 1].delay;
     }
 
     private void animation() {
-        if (Space.animationTimer == 1) {
+        if (Space.animationMilliSeconds == 1) {
             if (animationFrame > 2) {
                 animationFrame = 0;
             }
@@ -90,9 +56,8 @@ public class Bullet extends Actor {
     }
 
     public void startExplosion() {
-        System.out.println("Explosion started: " + explosionDamage);
-        damage = (explosionDamage / 100) * (50 / maxExplosionFrame);
-        setLocation(getX(), getY() - speed);
+        setLocation(getX(), getY() - (getImage().getHeight() / 2));
+        damage = explosionDamage / maxExplosionFrame;
         isExploding = true;
     }
 
@@ -104,7 +69,7 @@ public class Bullet extends Actor {
             exploded = true;
             getWorld().removeObject(this);
         }
-        dealDamage = explosionFrame >= maxExplosionFrame / 2;
+        dealDamage = explosionFrame >= (float) maxExplosionFrame / 100 * (float) delay;
         if (maxExplosionFrame >= 10) {
             frame = new GreenfootImage("Bullet/" + bulletType + "/explosion/" + String.format("%02d", explosionFrame) + ".png");
         } else {
@@ -117,7 +82,7 @@ public class Bullet extends Actor {
 
 
     public void act() {
-        if (isExploding && (Space.animationTimer * 10) % 30 == 0) {
+        if (isExploding && (Space.animationMilliSeconds * 10) % 30 == 0) {
             explode();
         } else if (!isExploding) {
             setLocation(getX(), getY() - speed);

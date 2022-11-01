@@ -23,7 +23,7 @@ public class Upgrade extends Actor {
     }
 
     private void animate() {
-        if (Space.animationTimer % 10 == 0) {
+        if (Space.animationMilliSeconds % 10 == 0) {
             if (animationFrame > 7) {
                 animationFrame = 0;
             }

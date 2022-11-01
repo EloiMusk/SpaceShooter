@@ -1,6 +1,5 @@
 import greenfoot.Actor;
 import greenfoot.Color;
-import greenfoot.Greenfoot;
 import greenfoot.GreenfootImage;
 
 public class UI extends Actor {
@@ -57,13 +56,13 @@ public class UI extends Actor {
         bg.drawImage(getAmmunitionImage(spaceShip.ammunition), 700, 550);
         bg.drawString(spaceShip.ammunition + "", 700, 550);
 
-        if(Space.animationTimer%2 == 0){
+        if(Space.animationMilliSeconds %2 == 0){
             ammunitionAnimationFrame++;
             if (ammunitionAnimationFrame > 33) {
                 ammunitionAnimationFrame = 0;
             }
         }
-        if (Space.animationTimer == 0) {
+        if (Space.animationMilliSeconds == 0) {
             shieldAnimationFrame++;
             heartAnimationFrame++;
             if (heartAnimationFrame > 3) {
