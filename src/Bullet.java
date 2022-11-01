@@ -35,6 +35,16 @@ public class Bullet extends Actor {
         getImage().scale(size, size);
         init();
     }
+    public Bullet(int type, boolean alien) {
+        if (alien) {
+            bulletDirection = -1;
+            isPlayerBullet = false;
+        }
+        this.bulletType = type;
+        setImage("Bullet/" + bulletType + "/0.png");
+        getImage().scale(size, size);
+        init();
+    }
 
     private void init() {
 //                TODO: Migrate to use int instead of Float for boosters
