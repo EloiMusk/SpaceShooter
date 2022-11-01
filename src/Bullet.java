@@ -1,6 +1,8 @@
 import greenfoot.Actor;
 import greenfoot.GreenfootImage;
 
+import java.util.List;
+
 public class Bullet extends Actor {
     private int delay;
     public float damageBoost = 1;
@@ -26,6 +28,8 @@ public class Bullet extends Actor {
         init();
         setImage("Bullet/" + bulletType + "/0.png");
         getImage().scale(size, size);
+        getImage().rotate(90);
+
     }
 
     public Bullet(int type, boolean alien) {
@@ -34,13 +38,15 @@ public class Bullet extends Actor {
             isPlayerBullet = false;
         }
         this.bulletType = type;
+        init();
         setImage("Bullet/" + bulletType + "/0.png");
         getImage().scale(size, size);
-        init();
+        getImage().rotate(90);
     }
 
     private void init() {
 //                TODO: Migrate to use int instead of Float for boosters
+        setRotation(-90);
         damage = (int) (BulletData.bullets[bulletType - 1].damage / damageBoost);
         speed = (int) (BulletData.bullets[bulletType - 1].speed / speedBoost);
         size = (int) (BulletData.bullets[bulletType - 1].size / sizeBoost);
@@ -57,6 +63,7 @@ public class Bullet extends Actor {
             }
             GreenfootImage frame = new GreenfootImage("Bullet/" + bulletType + "/" + animationFrame + ".png");
             frame.scale(size, size);
+            frame.rotate(90);
             setImage(frame);
             animationFrame++;
         }
@@ -98,9 +105,26 @@ public class Bullet extends Actor {
         if (isExploding && (Space.animationMilliSeconds * 10) % 30 == 0) {
             explode();
         } else if (!isExploding) {
-            setLocation(getX(), getY() - (speed * bulletDirection));
+            moveOneStep();
             animation();
             checkSurroundings();
+        }
+    }
+
+    private void moveOneStep() {
+        if (bulletType == 4) {
+            List<Alien> alienList = getNeighbours(200, false, Alien.class);
+            if (alienList.size() > 0) {
+                Alien alien = alienList.get(0);
+                turnTowards(alien.getX(), alien.getY());
+            }
+            move(speed * bulletDirection);
+        } else {
+            if (isPlayerBullet) {
+                move(speed * bulletDirection);
+            } else {
+                move((speed / 2) * bulletDirection);
+            }
         }
     }
 }

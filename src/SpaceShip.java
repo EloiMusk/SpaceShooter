@@ -12,7 +12,7 @@ public class SpaceShip extends Actor {
     private float bulletSpeedBoost = 1;
     private float bulletDamageBoost = 1;
     private float bulletSizeBoost = 1;
-    private int bulletType = 1;
+    private int bulletType = 4;
     private int bulletCoolDown = 0;
 
     public SpaceShip() {
