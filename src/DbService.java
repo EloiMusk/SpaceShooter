@@ -65,7 +65,7 @@ public class DbService {
         return success;
     }
 
-    public static ArrayList<Score> getScoreBoard() throws SQLException {
+    public static ArrayList<Score> getScores() throws SQLException {
         String sql = "SELECT * FROM scoreboard";
         ResultSet resultSet = connection.prepareStatement(sql).executeQuery();
         ArrayList<Score> scores = new ArrayList<>();
