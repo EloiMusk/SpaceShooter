@@ -12,8 +12,9 @@ public class SpaceShip extends Actor {
     private float bulletSpeedBoost = 1;
     private float bulletDamageBoost = 1;
     private float bulletSizeBoost = 1;
-    private int bulletType = 3;
+    private int bulletType = 1;
     private int bulletCoolDown = 0;
+
     public SpaceShip() {
         setImage("SpaceShip/SpaceShip0.png");
         getImage().scale(64, 64);
@@ -43,6 +44,7 @@ public class SpaceShip extends Actor {
         if (Greenfoot.isKeyDown("s")) {
             setLocation(getX(), getY() + (5 + movementSpeed));
         }
+//        TODO: Different shooting speed depending on bullet type
         if (Greenfoot.isKeyDown("space") && !isShooting) {
             if (this.ammunition > 0) {
                 for (int i = 0; i < this.bulletCount; i++) {
@@ -73,9 +75,9 @@ public class SpaceShip extends Actor {
                 this.health--;
             }
         }
-        if (isTouching(Bullet.class)){
+        if (isTouching(Bullet.class)) {
             Bullet bullet = (Bullet) getOneIntersectingObject(Bullet.class);
-            if (!bullet.isPlayerBullet){
+            if (!bullet.isPlayerBullet) {
                 if (!bullet.isExploding) {
                     bullet.startExplosion();
                     if (this.shield > 0) {
