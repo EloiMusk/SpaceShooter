@@ -23,6 +23,7 @@ public class DbService {
     }
 
     public static boolean updateSettings(Settings settings) throws SQLException {
+        connect();
         boolean success;
 //        Check if table settings exists with sqlite syntax
         String sql = "SELECT name FROM sqlite_master WHERE type='table' AND name='settings'";
@@ -38,10 +39,12 @@ public class DbService {
         } catch (Exception e) {
             success = connection.prepareStatement("UPDATE settings SET volume = " + settings.volume + ", infinite = " + settings.infinite + " WHERE id = 1").execute();
         }
+        close();
         return success;
     }
 
     public static Settings getSettings() throws SQLException {
+        connect();
         Settings settings = new Settings();
         String sql = "SELECT * FROM settings WHERE id = 1";
         ResultSet resultSet = connection.prepareStatement(sql).executeQuery();
@@ -49,10 +52,12 @@ public class DbService {
             settings.volume = resultSet.getInt("volume");
             settings.infinite = resultSet.getBoolean("infinite");
         }
+        close();
         return settings;
     }
 
     public static boolean addScore(String playerName, int score) throws SQLException {
+        connect();
         boolean success;
         String sql = "SELECT name FROM sqlite_master WHERE type='table' AND name='scoreboard'";
         ResultSet resultSet = connection.prepareStatement(sql).executeQuery();
@@ -62,16 +67,19 @@ public class DbService {
             connection.prepareStatement(sql).executeUpdate();
         }
         success = connection.prepareStatement("INSERT INTO scoreboard (player_name, score) VALUES('" + playerName + "','" + score + "')").execute();
+        close();
         return success;
     }
 
     public static ArrayList<Score> getScores() throws SQLException {
+        connect();
         String sql = "SELECT * FROM scoreboard";
         ResultSet resultSet = connection.prepareStatement(sql).executeQuery();
         ArrayList<Score> scores = new ArrayList<>();
         while (resultSet.next()) {
             scores.add(new Score(resultSet.getString("player_name"), resultSet.getInt("score"), resultSet.getInt("id")));
         }
+        close();
         return scores;
     }
 }
