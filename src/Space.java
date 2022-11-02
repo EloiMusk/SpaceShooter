@@ -45,6 +45,7 @@ public class Space extends World {
     }
 
     public void startGame() {
+        DbService.connect();
         addObject(new UI(), 400, 300);
         generateBackground();
         addObject(new SpaceShip(), 400, 500);
@@ -61,7 +62,7 @@ public class Space extends World {
     }
 
     private void generateBackground() {
-        setPaintOrder(UI.class, SpaceShip.class, Alien.class, Bullet.class);
+        setPaintOrder(UI.class, SpaceShip.class, Bullet.class, Alien.class);
 //        GreenfootImage background = new GreenfootImage("Background/" + level + ".png");
         GreenfootImage background = new GreenfootImage("Background/" + (Greenfoot.getRandomNumber(1) + 1) + ".png");
         background.scale(800, 600);
