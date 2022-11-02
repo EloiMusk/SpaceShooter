@@ -45,7 +45,6 @@ public class Space extends World {
     }
 
     public void startGame() {
-        DbService.connect();
         addObject(new UI(), 400, 300);
         generateBackground();
         addObject(new SpaceShip(), 400, 500);
