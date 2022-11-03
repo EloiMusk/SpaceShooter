@@ -2,11 +2,16 @@ import greenfoot.Actor;
 import greenfoot.Color;
 import greenfoot.GreenfootImage;
 
+import java.util.ArrayList;
+import java.util.Map;
+import java.util.Set;
+
 public class UI extends Actor {
 
     private int heartAnimationFrame = 0;
     private int shieldAnimationFrame = 0;
     private int ammunitionAnimationFrame = 0;
+    private ArrayList<UpgradeIcon> upgradeIcons = new ArrayList<UpgradeIcon>();
 
     private GreenfootImage getHealthImage(int health) {
         GreenfootImage healthImage = new GreenfootImage("UI/Health/" + health + "/" + heartAnimationFrame + ".png");
@@ -55,8 +60,24 @@ public class UI extends Actor {
         bg.drawImage(getShieldImage(spaceShip.shield), 50, 500);
         bg.drawImage(getAmmunitionImage(spaceShip.ammunition), 700, 550);
         bg.drawString(spaceShip.ammunition + "", 700, 550);
+        for (Map.Entry<UpgradeType, Boolean> upgrade : spaceShip.activeUpgrades.entrySet()) {
+            if (upgrade.getValue() && upgradeIcons.stream().noneMatch(upgradeIcon -> upgradeIcon.upgradeType == upgrade.getKey()) && upgrade.getKey() != UpgradeType.HEALTH && upgrade.getKey() != UpgradeType.SHIELD) {
+                upgradeIcons.add(new UpgradeIcon(upgrade.getKey()));
+            } else if (!upgrade.getValue() && upgradeIcons.stream().anyMatch(upgradeIcon -> upgradeIcon.upgradeType == upgrade.getKey())) {
+                try {
+                    upgradeIcons.remove(upgradeIcons.stream().filter(upgradeIcon -> upgradeIcon.upgradeType == upgrade.getKey()).findFirst().get());
+                } catch (Exception e) {
+                    //Do nothing
+                }
+            }
+        }
+        int upgradeIconY = getWorld().getHeight() - 100;
+        for (UpgradeIcon upgradeIcon : upgradeIcons) {
+            bg.drawImage(upgradeIcon, getWorld().getWidth() - upgradeIcon.getWidth(), upgradeIconY);
+            upgradeIconY -= upgradeIcon.getHeight() + 10;
+        }
 
-        if(Space.animationMilliSeconds %2 == 0){
+        if (Space.animationMilliSeconds % 2 == 0) {
             ammunitionAnimationFrame++;
             if (ammunitionAnimationFrame > 33) {
                 ammunitionAnimationFrame = 0;
