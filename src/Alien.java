@@ -5,7 +5,7 @@ import greenfoot.GreenfootImage;
 
 public class Alien extends Actor {
     private int animationFrame = 0;
-    private int difficulty = 2;
+    private int difficulty = 1;
     public int health;
     public int maxHealth;
     //    private int variant = Greenfoot.getRandomNumber(0);
@@ -18,8 +18,8 @@ public class Alien extends Actor {
         getImage().scale(50, 50);
     }
 
-    public Alien(int difficulty) {
-        this.difficulty = difficulty;
+    public Alien(int level) {
+        this.difficulty = (int) (level * Math.round((Math.random() * 2) + 1));
         this.health = this.difficulty * 100;
         this.maxHealth = this.difficulty * 100;
         setImage(getFrame(0));
@@ -39,7 +39,7 @@ public class Alien extends Actor {
     }
 
     private void animation() {
-        if ((Space.animationMilliSeconds * 10) % 30 == 0)  {
+        if ((Space.animationMilliSeconds * 10) % 30 == 0) {
             if (animationFrame >= 29) {
                 animationFrame = 0;
             }
@@ -50,7 +50,7 @@ public class Alien extends Actor {
     }
 
     public void spawnUpgrade() {
-        if (Greenfoot.getRandomNumber(100) < 30) {
+        if (Greenfoot.getRandomNumber(100) < ((double)(100/200) * difficulty)+10 || true) {
             getWorld().addObject(new Upgrade(), getX(), getY());
         }
     }
@@ -81,7 +81,7 @@ public class Alien extends Actor {
     }
 
     private void shoot() {
-        if ( Space.animationMilliSeconds%2 == 0 && Greenfoot.getRandomNumber(1000) < difficulty) {
+        if (Space.animationMilliSeconds % 3 == 0 && Greenfoot.getRandomNumber(1000) < difficulty) {
             getWorld().addObject(new Bullet(1, true), getX(), getY());
         }
     }

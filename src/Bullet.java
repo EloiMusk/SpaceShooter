@@ -48,9 +48,9 @@ public class Bullet extends Actor {
     private void init() {
 //                TODO: Migrate to use int instead of Float for boosters
         if (isPlayerBullet) {
-            Greenfoot.playSound("Bullet/" + bulletType + "/blast/" + (Greenfoot.getRandomNumber(3) + 1) + ".wav");
+            new SoundService("Bullet/" + bulletType + "/blast/" + (Greenfoot.getRandomNumber(3) + 1) + ".wav").playSound();
         }else {
-            Greenfoot.playSound("Alien/blast/" + (Greenfoot.getRandomNumber(3) + 1) + ".wav");
+            new SoundService("Alien/blast/" + (Greenfoot.getRandomNumber(3) + 1) + ".wav").playSound();
         }
         setRotation(-90);
         damage = (int) (BulletData.bullets[bulletType - 1].damage / damageBoost);

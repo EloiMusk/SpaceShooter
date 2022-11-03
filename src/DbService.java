@@ -43,6 +43,14 @@ public class DbService {
         return success;
     }
 
+    public static void toggleMute() throws SQLException {
+        connect();
+        Settings settings = getSettings();
+        settings.volume = settings.volume == 0 ? 80 : 0;
+        updateSettings(settings);
+        close();
+    }
+
     public static Settings getSettings() throws SQLException {
         connect();
         Settings settings = new Settings();

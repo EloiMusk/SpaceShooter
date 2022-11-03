@@ -1,6 +1,10 @@
+import dataTypes.Settings;
+import greenfoot.Color;
 import greenfoot.Greenfoot;
 import greenfoot.GreenfootImage;
 import greenfoot.World;
+
+import java.sql.SQLException;
 
 public class Space extends World {
     public Space() {
@@ -13,6 +17,17 @@ public class Space extends World {
     public static int animationSeconds;
     public static int animationMinutes;
     public static int score = 0;
+    private Button toggleMute = new Button("V", Color.BLACK, new Color(200, 200, 200, 100), this::toggleMute);
+    public static int volume = 100;
+    private boolean muted = false;
+
+    private void toggleMute() {
+        try {
+            DbService.toggleMute();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
     private void decrementAnimationMilliseconds() {
         if (animationMilliSeconds > 0) {
@@ -46,6 +61,7 @@ public class Space extends World {
 
     public void startGame() {
         addObject(new UI(), 400, 300);
+        addObject(toggleMute, 50, 50);
         generateBackground();
         addObject(new SpaceShip(), 400, 500);
         for (int r = 0; r < 3; r++) {
@@ -54,6 +70,7 @@ public class Space extends World {
             }
         }
         score = 0;
+        level = 1;
     }
 
     public void addScore(int points) {
@@ -61,8 +78,7 @@ public class Space extends World {
     }
 
     private void generateBackground() {
-        setPaintOrder(UI.class, SpaceShip.class, Bullet.class, Alien.class);
-//        GreenfootImage background = new GreenfootImage("Background/" + level + ".png");
+        setPaintOrder(Button.class, UI.class, SpaceShip.class, Bullet.class, Alien.class);
         GreenfootImage background = new GreenfootImage("Background/" + (Greenfoot.getRandomNumber(1) + 1) + ".png");
         background.scale(800, 600);
         setBackground(background);
@@ -76,19 +92,36 @@ public class Space extends World {
     }
 
     public void refreshGameStats() {
+        try {
+            Settings settings = DbService.getSettings();
+            volume = settings.volume;
+            if (volume <= 0 && !muted) {
+                removeObject(toggleMute);
+                toggleMute = new Button("\uD83D\uDD07", new Color(200, 200, 200, 100), Color.BLACK, this::toggleMute);
+                addObject(toggleMute, 50, 50);
+                muted = true;
+            } else if (volume > 0 && muted) {
+                removeObject(toggleMute);
+                toggleMute = new Button("\uD83D\uDD0A", new Color(200, 200, 200, 100), Color.BLACK, this::toggleMute);
+                addObject(toggleMute, 50, 50);
+                muted = false;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         if (getObjects(Alien.class).size() == 0) {
             level++;
             generateBackground();
             for (int r = 0; r < 3; r++) {
                 for (int c = 0; c < 10; c++) {
-                    addObject(new Alien(), 100 + (c * 70), 100 + (r * 70));
+                    addObject(new Alien(level), 100 + (c * 70), 100 + (r * 70));
                 }
             }
         }
     }
 
-    public void gemerateAmmunition() {
-        if (Greenfoot.getRandomNumber(150) < 1) {
+    public void generateAmmunition() {
+        if (Greenfoot.getRandomNumber(200) < level) {
             addObject(new Ammunition(), Greenfoot.getRandomNumber(800), 0);
         }
     }
@@ -96,6 +129,6 @@ public class Space extends World {
     public void act() {
         refreshGameStats();
         runAnimationTimer();
-        gemerateAmmunition();
+        generateAmmunition();
     }
 }
