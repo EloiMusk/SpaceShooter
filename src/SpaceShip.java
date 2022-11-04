@@ -204,7 +204,7 @@ public class SpaceShip extends Actor {
         }
         if (Space.animationSeconds % 50 == 0) {
             if (bulletCount > 1) {
-                bulletCount -= 0.5;
+                bulletCount -= 0.2;
             } else {
                 activeUpgrades.put(UpgradeType.FIRE_RATE, false);
             }
@@ -215,7 +215,7 @@ public class SpaceShip extends Actor {
                 activeUpgrades.put(UpgradeType.BULLET_SPEED, false);
             }
             if (bulletDamageBoost > 1) {
-                bulletDamageBoost -= 5;
+                bulletDamageBoost -= 10;
                 System.out.println("Bullet damage reduced: " + bulletDamageBoost);
             } else {
                 activeUpgrades.put(UpgradeType.BULLET_DAMAGE, false);
