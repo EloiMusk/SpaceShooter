@@ -16,6 +16,10 @@ public class Alien extends Actor {
     private boolean spawned = true;
     private int finalY;
     private int finalX;
+    int ySteps;
+    int xSteps;
+    boolean stepsSet = false;
+    int slideCounter = 0;
 
     public Alien() {
         this.health = this.difficulty * 100;
@@ -34,18 +38,22 @@ public class Alien extends Actor {
         getImage().scale(50, 50);
     }
 
-    private void slideIn(int finalY, int finalX) {
+    private void slideIn() {
         if (getY() < finalY) {
-            setLocation(getX(), getY() + 1);
+            setLocation(getX(), getY() + ySteps);
+        } else if (getY() > finalY) {
+            setLocation(getX(), getY() - ySteps);
         }
         if (getX() < finalX) {
-            setLocation(getX() + 1, getY());
+            setLocation(getX() + xSteps, getY());
+        } else if (getX() > finalX) {
+            setLocation(getX() - xSteps, getY());
         }
-        if (getY() > finalY) {
-            setLocation(getX(), getY() - 1);
+        if ((getY() < finalY && finalY > getY() + ySteps) || (getY() > finalY && finalY < getY() - ySteps)) {
+            setLocation(getX(), finalY);
         }
-        if (getX() > finalX) {
-            setLocation(getX() - 1, getY());
+        if ((getX() < finalX && finalX < getX() + xSteps) || (getX() > finalX && finalX > getX() - xSteps)) {
+            setLocation(finalX, getY());
         }
         if (getX() == finalX && getY() == finalY) {
             spawned = false;
@@ -136,8 +144,25 @@ public class Alien extends Actor {
     }
 
     public void act() {
+        if (slideCounter >= 80) {
+            setLocation(finalX, finalY);
+            spawned = false;
+        } else {
+            slideCounter++;
+        }
+        if (!stepsSet) {
+            ySteps = (getY() - finalY) / 60;
+            xSteps = (getX() - finalX) / 60;
+            if (ySteps < 0) {
+                ySteps = -ySteps;
+            }
+            if (xSteps < 0) {
+                xSteps = -xSteps;
+            }
+            stepsSet = true;
+        }
         if (spawned) {
-            slideIn(finalY, finalX);
+            slideIn();
         } else {
             shoot();
             isHit();
