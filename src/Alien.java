@@ -3,13 +3,19 @@ import greenfoot.Color;
 import greenfoot.Greenfoot;
 import greenfoot.GreenfootImage;
 
+import java.util.List;
+
 public class Alien extends Actor {
     private int animationFrame = 0;
     private int difficulty = 1;
     public int health;
     public int maxHealth;
-    //    private int variant = Greenfoot.getRandomNumber(0);
-    private int variant = 1;
+    private final int variant = Greenfoot.getRandomNumber(6) + 1;
+    private final int[] maxAnimationFrames = {28, 35, 6, 3, 5, 11};
+    private final double[] maxAnimationSpeed = {3, 2.5, 6, 10, 8, 4};
+    private boolean spawned = true;
+    private int finalY;
+    private int finalX;
 
     public Alien() {
         this.health = this.difficulty * 100;
@@ -18,7 +24,9 @@ public class Alien extends Actor {
         getImage().scale(50, 50);
     }
 
-    public Alien(int level) {
+    public Alien(int level, int y, int x) {
+        finalY = y;
+        finalX = x;
         this.difficulty = (int) (level * Math.round((Math.random() * 2) + 1));
         this.health = this.difficulty * 100;
         this.maxHealth = this.difficulty * 100;
@@ -26,8 +34,32 @@ public class Alien extends Actor {
         getImage().scale(50, 50);
     }
 
+    private void slideIn(int finalY, int finalX) {
+        if (getY() < finalY) {
+            setLocation(getX(), getY() + 1);
+        }
+        if (getX() < finalX) {
+            setLocation(getX() + 1, getY());
+        }
+        if (getY() > finalY) {
+            setLocation(getX(), getY() - 1);
+        }
+        if (getX() > finalX) {
+            setLocation(getX() - 1, getY());
+        }
+        if (getX() == finalX && getY() == finalY) {
+            spawned = false;
+        }
+    }
+
     private GreenfootImage getFrame(int frame) {
-        GreenfootImage image = new GreenfootImage("Alien/" + variant + "/" + String.format("%02d", frame) + ".png");
+        GreenfootImage image;
+        if (maxAnimationFrames[variant - 1] >= 10) {
+            image = new GreenfootImage("Alien/" + variant + "/" + String.format("%02d", frame) + ".png");
+        } else {
+            image = new GreenfootImage("Alien/" + variant + "/" + frame + ".png");
+        }
+        image.scale(400, 400);
         image.setColor(new Color(255, 255 - difficulty, 255 - difficulty));
         image.setFont(image.getFont().deriveFont(100));
         image.drawString("lvl." + difficulty, 100, 100);
@@ -38,9 +70,20 @@ public class Alien extends Actor {
         return image;
     }
 
+    private float lcm(int n1, int n2) {
+        int lcm;
+        lcm = Math.max(n1, n2);
+        while (true) {
+            if (lcm % n1 == 0 && lcm % n2 == 0) {
+                return lcm;
+            }
+            ++lcm;
+        }
+    }
+
     private void animation() {
-        if ((Space.animationMilliSeconds * 10) % 30 == 0) {
-            if (animationFrame >= 29) {
+        if (Space.animationMilliSeconds % maxAnimationSpeed[variant - 1] == 0) {
+            if (animationFrame >= maxAnimationFrames[variant - 1]) {
                 animationFrame = 0;
             }
             setImage(getFrame(animationFrame));
@@ -50,8 +93,12 @@ public class Alien extends Actor {
     }
 
     public void spawnUpgrade() {
-        if (Greenfoot.getRandomNumber(100) < ((double)(100/200) * difficulty)+10 || true) {
-            getWorld().addObject(new Upgrade(), getX(), getY());
+        try {
+            if (Greenfoot.getRandomNumber(100) < ((double) (100 / 200) * difficulty) + 10 || true) {
+                getWorld().addObject(new Upgrade(), getX(), getY());
+            }
+        } catch (Exception e) {
+//           Do nothing
         }
     }
 
@@ -62,19 +109,21 @@ public class Alien extends Actor {
     public void isHit() {
         Space space = (Space) getWorld();
         if (isTouching(Bullet.class)) {
-            Bullet bullet = (Bullet) getOneIntersectingObject(Bullet.class);
-            if (bullet.isPlayerBullet) {
-                if (!bullet.isExploding) {
-                    health -= bullet.damage;
-                    bullet.startExplosion();
-                }
-                if (bullet.dealDamage) {
-                    health -= bullet.damage;
-                }
-                if (isDead()) {
-                    space.addScore(10 * difficulty);
-                    spawnUpgrade();
-                    space.removeObject(this);
+            List<Bullet> bullets = getIntersectingObjects(Bullet.class);
+            for (Bullet bullet : bullets) {
+                if (bullet.isPlayerBullet) {
+                    if (!bullet.isExploding) {
+                        health -= bullet.damage;
+                        bullet.startExplosion();
+                    }
+                    if (bullet.dealDamage) {
+                        health -= bullet.damage;
+                    }
+                    if (isDead()) {
+                        space.addScore(10 * difficulty);
+                        spawnUpgrade();
+                        space.removeObject(this);
+                    }
                 }
             }
         }
@@ -87,8 +136,12 @@ public class Alien extends Actor {
     }
 
     public void act() {
+        if (spawned) {
+            slideIn(finalY, finalX);
+        } else {
+            shoot();
+            isHit();
+        }
         animation();
-        isHit();
-        shoot();
     }
 }

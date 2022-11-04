@@ -60,17 +60,25 @@ public class Space extends World {
     }
 
     public void startGame() {
+        score = 0;
+        level = 1;
         addObject(new UI(), 400, 300);
         addObject(toggleMute, 50, 50);
         generateBackground();
         addObject(new SpaceShip(), 400, 500);
         for (int r = 0; r < 3; r++) {
             for (int c = 0; c < 10; c++) {
-                addObject(new Alien(), 100 + (c * 70), 100 + (r * 70));
+                if (Greenfoot.getRandomNumber(100) % 2 == 0) {
+                    if (Greenfoot.getRandomNumber(100) % 2 == 0) {
+                        addObject(new Alien(level, 100 + (r * 70), 100 + (c * 70)), 0, Greenfoot.getRandomNumber(getHeight()) / 3);
+                    } else {
+                        addObject(new Alien(level, 100 + (r * 70), 100 + (c * 70)), getWidth(), Greenfoot.getRandomNumber(getHeight()) / 3);
+                    }
+                } else {
+                    addObject(new Alien(level, 100 + (r * 70), 100 + (c * 70)), Greenfoot.getRandomNumber(getWidth()), 0);
+                }
             }
         }
-        score = 0;
-        level = 1;
     }
 
     public void addScore(int points) {
@@ -114,7 +122,7 @@ public class Space extends World {
             generateBackground();
             for (int r = 0; r < 3; r++) {
                 for (int c = 0; c < 10; c++) {
-                    addObject(new Alien(level), 100 + (c * 70), 100 + (r * 70));
+                    addObject(new Alien(level, 100 + (r * 70), 100 + (c * 70)), Greenfoot.getRandomNumber(getWidth()), Greenfoot.getRandomNumber(getHeight()) / 3);
                 }
             }
         }
