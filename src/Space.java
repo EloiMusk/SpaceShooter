@@ -7,19 +7,20 @@ import greenfoot.World;
 import java.sql.SQLException;
 
 public class Space extends World {
-    public Space() {
-        super(800, 600, 1);
-        startGame();
-    }
-
     public static int level = 1;
     public static int animationMilliSeconds;
     public static int animationSeconds;
     public static int animationMinutes;
     public static int score = 0;
-    private Button toggleMute = new Button("V", Color.BLACK, new Color(200, 200, 200, 100), this::toggleMute);
-    public static int volume = 100;
+    private Button toggleMute;
+    public static int volume = 80;
     private boolean muted = false;
+    private final SoundService backgroundMusic = new SoundService();
+
+    public Space() {
+        super(800, 600, 1);
+        startGame();
+    }
 
     private void toggleMute() {
         try {
@@ -60,12 +61,34 @@ public class Space extends World {
     }
 
     public void startGame() {
+        try {
+            Settings settings = DbService.getSettings();
+            volume = settings.volume;
+            if (volume == 0) {
+                toggleMute = new Button("\uD83D\uDD07", new Color(200, 200, 200, 100), Color.BLACK, this::toggleMute);
+            } else {
+                toggleMute = new Button("\uD83D\uDD0A", new Color(200, 200, 200, 100), Color.BLACK, this::toggleMute);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        backgroundMusic.loop = true;
+        backgroundMusic.volumeOffset = -45;
+        playRandomBackgroundMusic();
         score = 0;
         level = 1;
         addObject(new UI(), 400, 300);
         addObject(toggleMute, 50, 50);
-        generateBackground();
         addObject(new SpaceShip(), 400, 500);
+        generateAliens();
+        generateBackground();
+    }
+
+    public void addScore(int points) {
+        score += points;
+    }
+
+    private void generateAliens() {
         for (int r = 0; r < 3; r++) {
             for (int c = 0; c < 10; c++) {
                 if (Greenfoot.getRandomNumber(100) % 2 == 0) {
@@ -81,10 +104,6 @@ public class Space extends World {
         }
     }
 
-    public void addScore(int points) {
-        score += points;
-    }
-
     private void generateBackground() {
         setPaintOrder(Button.class, UI.class, SpaceShip.class, Bullet.class, Alien.class);
         GreenfootImage background = new GreenfootImage("Background/" + (Greenfoot.getRandomNumber(1) + 1) + ".png");
@@ -95,6 +114,26 @@ public class Space extends World {
         }
     }
 
+    private void playRandomBackgroundMusic() {
+        String file = "Music/" + (Greenfoot.getRandomNumber(10) + 1) + ".mp3";
+        if (backgroundMusic.isPlaying()) {
+            backgroundMusic.stopSound();
+        }
+        backgroundMusic.playSound(file);
+    }
+
+    private void levelUp() {
+        SoundService levelUpSound = new SoundService();
+        levelUpSound.playSound("LevelUp/1.wav");
+        while (levelUpSound.isPlaying()) {
+            Greenfoot.delay(1);
+        }
+        level++;
+        generateAliens();
+        generateBackground();
+        playRandomBackgroundMusic();
+    }
+
     public static void gameOver() {
         Greenfoot.setWorld(new Menu(GameState.GAME_OVER));
     }
@@ -103,6 +142,7 @@ public class Space extends World {
         try {
             Settings settings = DbService.getSettings();
             volume = settings.volume;
+            backgroundMusic.setVolume();
             if (volume <= 0 && !muted) {
                 removeObject(toggleMute);
                 toggleMute = new Button("\uD83D\uDD07", new Color(200, 200, 200, 100), Color.BLACK, this::toggleMute);
@@ -118,13 +158,7 @@ public class Space extends World {
             e.printStackTrace();
         }
         if (getObjects(Alien.class).size() == 0) {
-            level++;
-            generateBackground();
-            for (int r = 0; r < 3; r++) {
-                for (int c = 0; c < 10; c++) {
-                    addObject(new Alien(level, 100 + (r * 70), 100 + (c * 70)), Greenfoot.getRandomNumber(getWidth()), Greenfoot.getRandomNumber(getHeight()) / 3);
-                }
-            }
+            levelUp();
         }
     }
 
