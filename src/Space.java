@@ -16,6 +16,8 @@ public class Space extends World {
     public static int volume = 80;
     private boolean muted = false;
     private final SoundService backgroundMusic = new SoundService();
+    private int backgroundScroll = 0;
+    private GreenfootImage currentBackground;
 
     public Space() {
         super(800, 600, 1);
@@ -61,6 +63,7 @@ public class Space extends World {
     }
 
     public void startGame() {
+        currentBackground = new GreenfootImage("Background/" + (Greenfoot.getRandomNumber(1) + 1) + ".png");
         try {
             Settings settings = DbService.getSettings();
             volume = settings.volume;
@@ -106,11 +109,26 @@ public class Space extends World {
 
     private void generateBackground() {
         setPaintOrder(Button.class, UI.class, SpaceShip.class, Bullet.class, Alien.class);
-        GreenfootImage background = new GreenfootImage("Background/" + (Greenfoot.getRandomNumber(1) + 1) + ".png");
-        background.scale(800, 600);
-        setBackground(background);
+        GreenfootImage bg = getBackground();
+        bg.scale(800, 600);
+        setBackground(bg);
         for (int i = 0; i < 10; i++) {
             addObject(new Star(), Greenfoot.getRandomNumber(800), Greenfoot.getRandomNumber(600));
+        }
+    }
+
+    private void refreshBackground() {
+//        scroll effect for background
+//        append background to itself
+        GreenfootImage background = new GreenfootImage(getBackground().getHeight(), getBackground().getWidth());
+        if (backgroundScroll >= getBackground().getHeight()) {
+            backgroundScroll = 0;
+        }
+        background.drawImage(currentBackground, 0, backgroundScroll - getBackground().getHeight());
+        background.drawImage(currentBackground, 0, backgroundScroll);
+        setBackground(background);
+        if (animationSeconds % 3 == 0) {
+            backgroundScroll++;
         }
     }
 
@@ -169,6 +187,7 @@ public class Space extends World {
     }
 
     public void act() {
+        refreshBackground();
         refreshGameStats();
         runAnimationTimer();
         generateAmmunition();
