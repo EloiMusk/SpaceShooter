@@ -3,6 +3,7 @@ import greenfoot.Color;
 import greenfoot.Greenfoot;
 import greenfoot.GreenfootImage;
 import greenfoot.World;
+import javafx.scene.layout.Background;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -23,6 +24,60 @@ public class Space extends World {
     public Space() {
         super(800, 600, 1, false);
         startGame();
+    }
+
+    int currBg = 1;
+
+    public void act() {
+        setPaintOrder(Button.class, UI.class, SpaceShip.class, Bullet.class, Alien.class, Upgrade.class, Ammunition.class, Fog.class, Star.class);
+        refreshBackground();
+        refreshGameStats();
+        runAnimationTimer();
+        generateAmmunition();
+    }
+
+    private void setNewCurrentBackground() {
+        currentBackground = new GreenfootImage("Background/" + (Greenfoot.getRandomNumber(13) + 1) + ".png");
+        float scale = (float) getHeight() / (float) currentBackground.getHeight();
+        currentBackground.scale((int) (scale * (float) currentBackground.getWidth()), getHeight());
+        switch (Greenfoot.getRandomNumber(4) + 1) {
+            case 1:
+                this.currentBackground.rotate(90);
+                break;
+            case 2:
+                this.currentBackground.rotate(180);
+                break;
+            case 3:
+                this.currentBackground.rotate(270);
+                break;
+            default:
+                break;
+        }
+    }
+
+    public void startGame() {
+        setNewCurrentBackground();
+        try {
+            Settings settings = DbService.getSettings();
+            volume = settings.volume;
+            if (volume == 0) {
+                toggleMute = new Button("\uD83D\uDD07", new Color(200, 200, 200, 100), Color.BLACK, this::toggleMute);
+            } else {
+                toggleMute = new Button("\uD83D\uDD0A", new Color(200, 200, 200, 100), Color.BLACK, this::toggleMute);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        backgroundMusic.loop = true;
+        backgroundMusic.volumeOffset = -45;
+        playRandomBackgroundMusic();
+        score = 0;
+        level = 1;
+        addObject(new UI(), 400, 300);
+        addObject(toggleMute, 50, 50);
+        addObject(new SpaceShip(), 400, 500);
+        generateAliens();
+        generateBackground();
     }
 
     private void toggleMute() {
@@ -61,34 +116,6 @@ public class Space extends World {
         decrementAnimationMilliseconds();
         decrementAnimationSeconds();
         decrementAnimationMinutes();
-    }
-
-    public void startGame() {
-//        currentBackground = new GreenfootImage("Background/" + (Greenfoot.getRandomNumber(7) + 1) + ".png");
-        currentBackground = new GreenfootImage("Background/" + 2 + ".png");
-        float scale = (float) getHeight() / (float) currentBackground.getHeight();
-        currentBackground.scale((int) (scale * (float) currentBackground.getWidth()), getHeight());
-        try {
-            Settings settings = DbService.getSettings();
-            volume = settings.volume;
-            if (volume == 0) {
-                toggleMute = new Button("\uD83D\uDD07", new Color(200, 200, 200, 100), Color.BLACK, this::toggleMute);
-            } else {
-                toggleMute = new Button("\uD83D\uDD0A", new Color(200, 200, 200, 100), Color.BLACK, this::toggleMute);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        backgroundMusic.loop = true;
-        backgroundMusic.volumeOffset = -45;
-        playRandomBackgroundMusic();
-        score = 0;
-        level = 1;
-        addObject(new UI(), 400, 300);
-        addObject(toggleMute, 50, 50);
-        addObject(new SpaceShip(), 400, 500);
-        generateAliens();
-        generateBackground();
     }
 
     public void addScore(int points) {
@@ -147,11 +174,11 @@ public class Space extends World {
         for (int i = 0; i < 30; i++) {
             for (Fog fog : fogs) {
                 int setWidth = fog.getImage().getWidth();
-                setWidth += ((int) (getWidth() * 1.5)-setWidth) / (30-i);
+                setWidth += ((int) (getWidth() * 1.5) - setWidth) / (30 - i);
                 int setHeight = fog.getImage().getHeight();
-                setHeight += ((int) (getWidth() * 1.5) - setHeight) / (30-i);
+                setHeight += ((int) (getWidth() * 1.5) - setHeight) / (30 - i);
                 int transparency = fog.getImage().getTransparency();
-                transparency += (255-transparency) / (30-i);
+                transparency += (255 - transparency) / (30 - i);
                 fog.getImage().setTransparency(transparency);
                 fog.getImage().scale(setWidth, setHeight);
                 fog.moveOnce();
@@ -164,27 +191,29 @@ public class Space extends World {
             }
             Greenfoot.delay(1);
         }
-        currentBackground = new GreenfootImage("Background/" + (Greenfoot.getRandomNumber(7) + 1) + ".png");
-        float scale = (float) getWidth() / (float) currentBackground.getWidth();
-        currentBackground.scale(getWidth(), (int) (scale * (float) currentBackground.getHeight()));
+        setNewCurrentBackground();
         setBackground(currentBackground);
         for (int i = 0; i < 30; i++) {
             for (Fog fog : fogs) {
                 int setWidth = fog.getImage().getWidth();
-                setWidth -= (setWidth - fog.width) / (30-i);
+                setWidth -= (setWidth - fog.width) / (30 - i);
                 int setHeight = fog.getImage().getHeight();
-                setHeight -= (setHeight - fog.height) / (30-i);
+                setHeight -= (setHeight - fog.height) / (30 - i);
                 int transparency = fog.getImage().getTransparency();
-                transparency -= (transparency - fog.transparency) / (30-i);
+                transparency -= (transparency - fog.transparency) / (30 - i);
                 fog.getImage().setTransparency(transparency);
                 fog.getImage().scale(setWidth, setHeight);
                 fog.moveOnce();
             }
             Greenfoot.delay(1);
         }
+        for (Fog fog : fogs) {
+            fog.getImage().setTransparency(fog.transparency);
+            fog.getImage().scale(fog.width, fog.height);
+            fog.moveOnce();
+        }
         level++;
         generateAliens();
-        generateBackground();
         playRandomBackgroundMusic();
     }
 
@@ -222,13 +251,5 @@ public class Space extends World {
         if (Greenfoot.getRandomNumber(200) < level) {
             addObject(new Ammunition(), Greenfoot.getRandomNumber(800), 0);
         }
-    }
-
-    public void act() {
-        setPaintOrder(Button.class, UI.class, SpaceShip.class, Bullet.class, Alien.class, Upgrade.class, Ammunition.class, Fog.class, Star.class);
-        refreshBackground();
-        refreshGameStats();
-        runAnimationTimer();
-        generateAmmunition();
     }
 }
