@@ -23,7 +23,9 @@ public class Bullet extends Actor {
     public boolean dealDamage = false;
     private int bulletDirection = 1;
     public boolean isPlayerBullet = true;
-    private SoundService bulletSound = new SoundService();
+    private final SoundService bulletSound = new SoundService();
+    private final SoundService explosionSound = new SoundService();
+    private boolean explosionSoundPlayed = false;
 
     public Bullet(int type) {
         this.bulletType = type;
@@ -51,6 +53,7 @@ public class Bullet extends Actor {
         bulletSound.volumeOffset = BulletData.bullets[bulletType - 1].volumeOffset;
         if (isPlayerBullet) {
             bulletSound.playSound("Bullet/" + bulletType + "/blast/" + (Greenfoot.getRandomNumber(3) + 1) + ".wav");
+            explosionSound.setSound("Bullet/" + bulletType + "/explosion/1.wav");
         } else {
             bulletSound.playSound("Alien/blast/" + (Greenfoot.getRandomNumber(3) + 1) + ".wav");
         }
@@ -84,6 +87,10 @@ public class Bullet extends Actor {
     }
 
     public void startExplosion() {
+        if (!explosionSoundPlayed && isPlayerBullet && bulletType != 4) {
+            explosionSound.playSound();
+            explosionSoundPlayed = true;
+        }
         setLocation(getX(), getY() - (getImage().getHeight() / 2));
         damage = explosionDamage / maxExplosionFrame;
         isExploding = true;
@@ -106,6 +113,10 @@ public class Bullet extends Actor {
         frame.scale(explosionSize, explosionSize);
         frame.rotate(90);
         setImage(frame);
+        if (dealDamage && !explosionSoundPlayed && isPlayerBullet && bulletType == 4) {
+            explosionSound.playSound();
+            explosionSoundPlayed = true;
+        }
         explosionFrame++;
     }
 
