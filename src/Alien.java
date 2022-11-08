@@ -104,7 +104,7 @@ public class Alien extends Actor {
 
     public void spawnUpgrade() {
         try {
-            if (Greenfoot.getRandomNumber(100) < ((double) (100 / 200) * difficulty) + 10 || true) {
+            if ((difficulty >= 1 && Greenfoot.getRandomNumber(100) < 20) || (difficulty >= 10 && Greenfoot.getRandomNumber(100) < 50) || difficulty >= 15 ||true) {
                 getWorld().addObject(new Upgrade(), getX(), getY());
             }
         } catch (Exception e) {
