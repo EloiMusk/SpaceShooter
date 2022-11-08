@@ -32,6 +32,7 @@ public class Space extends World {
         refreshGameStats();
         runAnimationTimer();
         generateAmmunition();
+        generateUpgrade();
     }
 
     private void setNewCurrentBackground() {
@@ -226,6 +227,20 @@ public class Space extends World {
         level++;
         generateAliens();
         playRandomBackgroundMusic();
+    }
+
+    private void generateUpgrade() {
+        if (animationMilliSeconds == 0) {
+            if (level > 2 && Greenfoot.getRandomNumber(100) < 10) {
+                addObject(new Upgrade(), Greenfoot.getRandomNumber(getWidth()), 0);
+            }
+            if (level > 5 && Greenfoot.getRandomNumber(100) < 30) {
+                addObject(new Upgrade(), Greenfoot.getRandomNumber(getWidth()), 0);
+            }
+            if (level > 10 && Greenfoot.getRandomNumber(100) < 50) {
+                addObject(new Upgrade(), Greenfoot.getRandomNumber(getWidth()), 0);
+            }
+        }
     }
 
     public void gameOver() {
