@@ -32,7 +32,7 @@ public class BulletData {
 //            Bullet type 4 (Missile)
             new BulletData(6, 20, 30, 80, 200, 30, 30, 70, -15),
 //            Bullet type 5 (Nuke)
-            new BulletData(5, 20, 90, 90, 200, 23, 10, 50, -10)};
+            new BulletData(5, 20, 90, 300, 200, 24, 10, 50, -10)};
 
     public static BulletData getBullet(int type) {
         return bullets[type - 1];

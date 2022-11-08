@@ -1,12 +1,10 @@
 import dataTypes.Settings;
-import greenfoot.Color;
-import greenfoot.Greenfoot;
-import greenfoot.GreenfootImage;
-import greenfoot.World;
+import greenfoot.*;
 import javafx.scene.layout.Background;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 
 public class Space extends World {
     public static int level = 1;
@@ -169,8 +167,21 @@ public class Space extends World {
 
     private void levelUp() {
         ArrayList<Fog> fogs = (ArrayList<Fog>) getObjects(Fog.class);
+        getObjects(SpaceShip.class).get(0).ammunition = 50;
         SoundService levelUpSound = new SoundService();
         levelUpSound.playSound("LevelUp/1.wav");
+        for (Upgrade upgrade : getObjects(Upgrade.class)) {
+            removeObject(upgrade);
+        }
+        for (Ammunition ammunition : getObjects(Ammunition.class)) {
+            removeObject(ammunition);
+        }
+        for (AlienDeath alienDeath : getObjects(AlienDeath.class)) {
+            removeObject(alienDeath);
+        }
+        for (Bullet bullet : getObjects(Bullet.class)) {
+            removeObject(bullet);
+        }
         for (int i = 0; i < 30; i++) {
             for (Fog fog : fogs) {
                 int setWidth = fog.getImage().getWidth();
