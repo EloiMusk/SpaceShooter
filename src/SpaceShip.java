@@ -92,7 +92,10 @@ public class SpaceShip extends Actor {
 
     public void isHit() {
         if (isTouching(Alien.class)) {
-            removeTouching(Alien.class);
+            Alien alien = (Alien) getOneIntersectingObject(Alien.class);
+            alien.hasDied = true;
+            getWorld().addObject(new AlienDeath(alien.variant), alien.getX(), alien.getY());
+            getWorld().removeObject(alien);
             if (this.shield > 0) {
                 shieldBreakSound.playSound();
                 this.shield--;
@@ -117,8 +120,18 @@ public class SpaceShip extends Actor {
             }
         }
         if (this.health <= 0) {
+            playDeathAnimation();
             Space space = (Space) getWorld();
             space.gameOver();
+        }
+    }
+
+    private void playDeathAnimation() {
+        new SoundService("DeathExplosion/SpaceShip/1.wav").playSound();
+        for (int i = 0; i <= 14; i++) {
+            setImage("DeathExplosion/SpaceShip/" + String.format("%02d", i) + ".png");
+            getImage().scale(100, 100);
+            Greenfoot.delay(8);
         }
     }
 

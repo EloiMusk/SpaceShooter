@@ -10,7 +10,7 @@ public class Alien extends Actor {
     private int difficulty = 1;
     public int health;
     public int maxHealth;
-    private final int variant = Greenfoot.getRandomNumber(6) + 1;
+    public final int variant = Greenfoot.getRandomNumber(6) + 1;
     private final int[] maxAnimationFrames = {28, 35, 6, 3, 5, 11};
     private final double[] maxAnimationSpeed = {3, 2.5, 6, 10, 8, 4};
     private boolean spawned = true;
@@ -20,6 +20,8 @@ public class Alien extends Actor {
     int xSteps;
     boolean stepsSet = false;
     int slideCounter = 0;
+
+    public boolean hasDied = false;
 
     public Alien() {
         this.health = this.difficulty * 100;
@@ -127,9 +129,11 @@ public class Alien extends Actor {
                     if (bullet.dealDamage) {
                         health -= bullet.damage;
                     }
-                    if (isDead()) {
+                    if (isDead() && !hasDied) {
+                        hasDied = true;
                         space.addScore(10 * difficulty);
                         spawnUpgrade();
+                        space.addObject(new AlienDeath(variant), getX(), getY());
                         space.removeObject(this);
                     }
                 }

@@ -158,7 +158,7 @@ public class Space extends World {
             }
             Greenfoot.delay(1);
         }
-        for (int i = 0; i < 30; i++) {
+        for (int i = 0; i < 15; i++) {
             for (Fog fog : fogs) {
                 fog.moveOnce();
             }
