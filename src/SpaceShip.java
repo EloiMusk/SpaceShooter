@@ -17,6 +17,9 @@ public class SpaceShip extends Actor {
     private float bulletSizeBoost = 1;
     private int bulletType = 1;
     private int bulletCoolDown = 0;
+    private final SoundService heartBreakSound = new SoundService("HeartBreak/1.wav");
+    private final SoundService shieldBreakSound = new SoundService("ShieldBreak/1.wav");
+    private final SoundService powerUpSound = new SoundService("PowerUp/1.wav");
     public Map<UpgradeType, Boolean> activeUpgrades = new HashMap<>();
 
     public SpaceShip() {
@@ -46,16 +49,24 @@ public class SpaceShip extends Actor {
 
     public void controls() {
         if (Greenfoot.isKeyDown("a")) {
-            setLocation(getX() - (5 + movementSpeed), getY());
+            if (getX() > 0) {
+                setLocation(getX() - (5 + movementSpeed), getY());
+            }
         }
         if (Greenfoot.isKeyDown("d")) {
-            setLocation(getX() + (5 + movementSpeed), getY());
+            if (getX() < getWorld().getWidth()) {
+                setLocation(getX() + (5 + movementSpeed), getY());
+            }
         }
         if (Greenfoot.isKeyDown("w")) {
-            setLocation(getX(), getY() - (5 + movementSpeed));
+            if (getY() > 0) {
+                setLocation(getX(), getY() - (5 + movementSpeed));
+            }
         }
         if (Greenfoot.isKeyDown("s")) {
-            setLocation(getX(), getY() + (5 + movementSpeed));
+            if (getY() < getWorld().getHeight()) {
+                setLocation(getX(), getY() + (5 + movementSpeed));
+            }
         }
 //        TODO: Different shooting speed depending on bullet type
         if (Greenfoot.isKeyDown("space") && !isShooting) {
@@ -83,8 +94,10 @@ public class SpaceShip extends Actor {
         if (isTouching(Alien.class)) {
             removeTouching(Alien.class);
             if (this.shield > 0) {
+                shieldBreakSound.playSound();
                 this.shield--;
             } else {
+                heartBreakSound.playSound();
                 this.health--;
             }
         }
@@ -94,8 +107,10 @@ public class SpaceShip extends Actor {
                 if (!bullet.isExploding) {
                     bullet.startExplosion();
                     if (this.shield > 0) {
+                        shieldBreakSound.playSound();
                         this.shield--;
                     } else {
+                        heartBreakSound.playSound();
                         this.health--;
                     }
                 }
@@ -109,6 +124,9 @@ public class SpaceShip extends Actor {
 
     public void isHitByUpgrade() {
         if (isTouching(Upgrade.class)) {
+            if (!powerUpSound.isPlaying()) {
+                powerUpSound.playSound();
+            }
             Upgrade upgrade = (Upgrade) getOneIntersectingObject(Upgrade.class);
             switch (upgrade.upgradeType) {
                 case HEALTH:
@@ -242,6 +260,7 @@ public class SpaceShip extends Actor {
     public void act() {
         animation();
         controls();
+
         isHit();
         isHitByUpgrade();
         coolDown();
