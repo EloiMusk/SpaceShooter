@@ -121,7 +121,7 @@ public class Space extends World {
 
     private void refreshBackground() {
         GreenfootImage background = new GreenfootImage(getHeight(), getWidth());
-        if (backgroundScroll >= getHeight()) {
+        if (backgroundScroll > getHeight()) {
             backgroundScroll = 0;
         }
         background.drawImage(currentBackground, 0, backgroundScroll - currentBackground.getHeight());
@@ -190,6 +190,7 @@ public class Space extends World {
 
     public void gameOver() {
         backgroundMusic.stopSound();
+        new SoundService().playSound("GameOver/1.wav");
         Greenfoot.setWorld(new Menu(GameState.GAME_OVER));
     }
 
