@@ -81,8 +81,7 @@ public class SpaceShip extends Actor {
                 isShooting = true;
                 this.ammunition--;
             } else {
-//                TODO: Add effect for no ammunition
-                System.out.println("Out of ammunition");
+                new SoundService("Bullet/NoAmmo/1.wav").playSound();
             }
         }
         if (!Greenfoot.isKeyDown("space") && isShooting) {
