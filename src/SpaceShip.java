@@ -22,6 +22,7 @@ public class SpaceShip extends Actor {
     private final SoundService shieldBreakSound = new SoundService("ShieldBreak/1.wav");
     private final SoundService powerUpSound = new SoundService("PowerUp/1.wav");
     public Map<UpgradeType, Boolean> activeUpgrades = new HashMap<>();
+    boolean camShoot = true;
 
     public SpaceShip() {
         setImage("SpaceShip/SpaceShip0.png");
@@ -70,7 +71,7 @@ public class SpaceShip extends Actor {
             }
         }
 //        TODO: Different shooting speed depending on bullet type
-        if (Greenfoot.isKeyDown("space") && !isShooting) {
+        if (Greenfoot.isKeyDown("space") && !isShooting && camShoot) {
             if (this.ammunition > 0) {
                 for (int i = 0; i < this.bulletCount; i++) {
                     Bullet bullet = new Bullet(bulletType);
@@ -84,6 +85,7 @@ public class SpaceShip extends Actor {
             } else {
                 new SoundService("Bullet/NoAmmo/1.wav").playSound();
             }
+            camShoot = false;
         }
         if (!Greenfoot.isKeyDown("space") && isShooting) {
             isShooting = false;
@@ -221,7 +223,7 @@ public class SpaceShip extends Actor {
     private void coolDown() {
 //      Every 1.6s and a bit seconds
         if (Space.animationSeconds % 100 == 0) {
-            if (this.ammunition < 40) {
+            if (this.ammunition < maxAmmunition) {
                 this.ammunition += (Space.level / 2) + 1;
             }
         }
@@ -258,14 +260,12 @@ public class SpaceShip extends Actor {
                 activeUpgrades.put(UpgradeType.BULLET_SIZE, false);
             }
         }
-        if (Space.animationSeconds % 60 == 0 && bulletType > 1) {
-            if (bulletCoolDown >= BulletData.getBullet(bulletType).coolDown) {
-                bulletCoolDown = 0;
-                bulletType = 1;
-                resetBulletType();
-            } else {
-                bulletCoolDown++;
-            }
+        if (bulletType > 1 && Space.animationSeconds % (60 * BulletData.getBullet(bulletType).coolDown) == 0) {
+            bulletType = 1;
+            resetBulletType();
+        }
+        if (Space.animationMilliSeconds % (60 / BulletData.getBullet(bulletType).fireRate) == 0) {
+            camShoot = true;
         }
 
     }
@@ -273,7 +273,6 @@ public class SpaceShip extends Actor {
     public void act() {
         animation();
         controls();
-
         isHit();
         isHitByUpgrade();
         coolDown();

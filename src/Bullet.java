@@ -50,7 +50,7 @@ public class Bullet extends Actor {
 
     private void init() {
 //                TODO: Migrate to use int instead of Float for boosters
-        bulletSound.volumeOffset = BulletData.bullets[bulletType - 1].volumeOffset;
+        bulletSound.volumeOffset = BulletData.bullets[bulletType - 1].blastVolumeOffset;
         if (isPlayerBullet) {
             bulletSound.playSound("Bullet/" + bulletType + "/blast/" + (Greenfoot.getRandomNumber(3) + 1) + ".wav");
             explosionSound.setSound("Bullet/" + bulletType + "/explosion/1.wav");
