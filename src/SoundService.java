@@ -16,12 +16,12 @@ public class SoundService {
     public void setSound(String file) {
         this.fileName = file;
         sound = new GreenfootSound(fileName);
-        sound.setVolume(Space.volume + volumeOffset);
+        setVolume();
     }
 
     public void setSound() {
         sound = new GreenfootSound(fileName);
-        sound.setVolume(Space.volume + volumeOffset);
+        setVolume();
     }
 
     public void setVolume() {
@@ -34,7 +34,7 @@ public class SoundService {
 
     public void playSound() {
         setSound();
-        sound.setVolume(Space.volume + volumeOffset);
+        setVolume();
         if (loop) {
             sound.playLoop();
         } else {
@@ -44,13 +44,11 @@ public class SoundService {
 
     public void playSound(String fileName) {
         setSound(fileName);
-        if (Space.volume > 0) {
-            sound.setVolume(Space.volume + volumeOffset);
-            if (loop) {
-                sound.playLoop();
-            } else {
-                sound.play();
-            }
+        setVolume();
+        if (loop) {
+            sound.playLoop();
+        } else {
+            sound.play();
         }
     }
 
@@ -59,9 +57,6 @@ public class SoundService {
     }
 
     public boolean isPlaying() {
-        if (sound == null) {
-            return false;
-        }
         return sound.isPlaying();
     }
 }

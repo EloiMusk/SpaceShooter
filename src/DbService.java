@@ -5,7 +5,7 @@ import java.sql.*;
 import java.util.ArrayList;
 
 public class DbService {
-    private static final String DB_URL = "jdbc:sqlite:src\\db\\SpaceShooter.db";
+    private static final String DB_URL = "jdbc:sqlite:db\\SpaceShooter.db";
     private static final String DB_DRIVER = "org.sqlite.JDBC";
     private static Connection connection;
 

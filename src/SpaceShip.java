@@ -1,7 +1,6 @@
 import greenfoot.Actor;
 import greenfoot.Greenfoot;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -18,7 +17,7 @@ public class SpaceShip extends Actor {
     private float bulletSizeBoost = 1;
     private int bulletType = 1;
     private int bulletCoolDown = 0;
-    public Map<UpgradeType, Boolean> activeUpgrades = new HashMap<UpgradeType, Boolean>();
+    public Map<UpgradeType, Boolean> activeUpgrades = new HashMap<>();
 
     public SpaceShip() {
         setImage("SpaceShip/SpaceShip0.png");
@@ -103,7 +102,8 @@ public class SpaceShip extends Actor {
             }
         }
         if (this.health <= 0) {
-            Space.gameOver();
+            Space space = (Space) getWorld();
+            space.gameOver();
         }
     }
 
@@ -191,7 +191,7 @@ public class SpaceShip extends Actor {
 //      Every 1.6s and a bit seconds
         if (Space.animationSeconds % 100 == 0) {
             if (this.ammunition < 40) {
-                this.ammunition += (int) (Space.level / 2) + 1;
+                this.ammunition += (Space.level / 2) + 1;
             }
         }
 //        Every 500 or something milliseconds

@@ -17,7 +17,7 @@ public class Star extends Actor {
 
     private void animation() {
         if (Space.animationMilliSeconds % speed == 0) {
-                setLocation(getX(), getY() + 1);
+                setLocation(getX(), getY() + 3);
             }
     }
 
