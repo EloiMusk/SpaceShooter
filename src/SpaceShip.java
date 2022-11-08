@@ -9,6 +9,7 @@ public class SpaceShip extends Actor {
     public int health = 3;
     public int shield = 0;
     public int ammunition = 50;
+    public int maxAmmunition = 40;
     private boolean isShooting = false;
     private int movementSpeed = 0;
     private int bulletCount = 1;
@@ -201,10 +202,10 @@ public class SpaceShip extends Actor {
             getWorld().removeObject(upgrade);
         }
         if (isTouching(Ammunition.class)) {
-            if ((this.ammunition + 5) <= 40) {
+            if ((this.ammunition + 5) <= maxAmmunition) {
                 this.ammunition += 5;
             } else {
-                this.ammunition = 40;
+                this.ammunition = maxAmmunition;
             }
             getWorld().removeObject(getOneIntersectingObject(Ammunition.class));
         }

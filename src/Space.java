@@ -168,7 +168,8 @@ public class Space extends World {
 
     private void levelUp() {
         ArrayList<Fog> fogs = (ArrayList<Fog>) getObjects(Fog.class);
-        getObjects(SpaceShip.class).get(0).ammunition = 50;
+        getObjects(SpaceShip.class).get(0).maxAmmunition += level * 2;
+        getObjects(SpaceShip.class).get(0).ammunition = getObjects(SpaceShip.class).get(0).maxAmmunition;
         SoundService levelUpSound = new SoundService();
         levelUpSound.playSound("LevelUp/1.wav");
         for (Upgrade upgrade : getObjects(Upgrade.class)) {
