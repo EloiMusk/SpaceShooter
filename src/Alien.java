@@ -4,6 +4,7 @@ import greenfoot.Greenfoot;
 import greenfoot.GreenfootImage;
 
 import java.util.List;
+import java.util.Map;
 
 public class Alien extends Actor {
     private int animationFrame = 0;
@@ -14,8 +15,8 @@ public class Alien extends Actor {
     private final int[] maxAnimationFrames = {28, 35, 6, 3, 5, 11};
     private final double[] maxAnimationSpeed = {3, 2.5, 6, 10, 8, 4};
     public boolean spawned = false;
-    private int finalY;
-    private int finalX;
+    public int finalY;
+    public int finalX;
     int ySteps;
     int xSteps;
     boolean stepsSet = false;
@@ -41,22 +42,21 @@ public class Alien extends Actor {
     }
 
     private void slideIn() {
-        if (getY() < finalY) {
-            setLocation(getX(), getY() + ySteps);
-        } else if (getY() > finalY) {
-            setLocation(getX(), getY() - ySteps);
-        }
-        if (getX() < finalX) {
-            setLocation(getX() + xSteps, getY());
-        } else if (getX() > finalX) {
-            setLocation(getX() - xSteps, getY());
-        }
-        if ((getY() < finalY && finalY > getY() + ySteps) || (getY() > finalY && finalY < getY() - ySteps)) {
-            setLocation(getX(), finalY);
-        }
-        if ((getX() < finalX && finalX < getX() + xSteps) || (getX() > finalX && finalX > getX() - xSteps)) {
-            setLocation(finalX, getY());
-        }
+        if (getY() - 10 >= finalY) {
+            setLocation(getX(), getY() - 10);
+        } else if (getY() - 1 >= finalY) {
+            setLocation(getX(), getY() - 1);
+        } else if (getY() + 10 <= finalY) {
+            setLocation(getX(), getY() + 10);
+        } else setLocation(getX(), Math.min(getY() + 1, finalY));
+
+        if (getX() - 10 >= finalX) {
+            setLocation(getX() - 10, getY());
+        } else if (getX() - 1 >= finalX) {
+            setLocation(getX() - 1, getY());
+        } else if (getX() + 10 <= finalX) {
+            setLocation(getX() + 10, getY());
+        } else setLocation(Math.min(getX() + 1, finalX), getY());
         if (getX() == finalX && getY() == finalY) {
             spawned = true;
         }
@@ -104,7 +104,7 @@ public class Alien extends Actor {
 
     public void spawnUpgrade() {
         try {
-            if (true||(difficulty >= 1 && Greenfoot.getRandomNumber(100) < 20) || (difficulty >= 5 && Greenfoot.getRandomNumber(100) < 50) || difficulty >= 10) {
+            if ((difficulty >= 1 && Greenfoot.getRandomNumber(100) < 20) || (difficulty >= 5 && Greenfoot.getRandomNumber(100) < 50) || difficulty >= 10) {
                 getWorld().addObject(new Upgrade(), getX(), getY());
             }
         } catch (Exception e) {
@@ -142,29 +142,13 @@ public class Alien extends Actor {
     }
 
     private void shoot() {
-        if (Space.animationMilliSeconds % 3 == 0 && Greenfoot.getRandomNumber(1000) < difficulty) {
+        if (Space.animationMinutes % 30 == 0 && Greenfoot.getRandomNumber(200) < difficulty / 2) {
             getWorld().addObject(new Bullet(1, true), getX(), getY());
         }
     }
 
     public void act() {
-        if (slideCounter >= 80) {
-            setLocation(finalX, finalY);
-            spawned = true;
-        } else {
-            slideCounter++;
-        }
-        if (!stepsSet) {
-            ySteps = (getY() - finalY) / 60;
-            xSteps = (getX() - finalX) / 60;
-            if (ySteps < 0) {
-                ySteps = -ySteps;
-            }
-            if (xSteps < 0) {
-                xSteps = -xSteps;
-            }
-            stepsSet = true;
-        }
+
         if (!spawned) {
             slideIn();
         } else {

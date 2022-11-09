@@ -15,6 +15,7 @@ public class SpaceShip extends Actor {
     private int bulletCount = 1;
     private float bulletSpeedBoost = 1;
     private float bulletDamageBoost = 1;
+    private int baseBulletDamageBoost;
     private float bulletSizeBoost = 1;
     private int bulletType = 1;
     private int bulletCoolDown = 0;
@@ -175,6 +176,7 @@ public class SpaceShip extends Actor {
                 case BULLET_DAMAGE:
                     activeUpgrades.put(UpgradeType.BULLET_DAMAGE, true);
                     this.bulletDamageBoost += 100;
+                    this.baseBulletDamageBoost += Space.level;
                     break;
                 case BULLET_SIZE:
                     activeUpgrades.put(UpgradeType.BULLET_SIZE, true);
@@ -251,7 +253,7 @@ public class SpaceShip extends Actor {
             } else {
                 activeUpgrades.put(UpgradeType.BULLET_SPEED, false);
             }
-            if (bulletDamageBoost > 1) {
+            if (bulletDamageBoost > baseBulletDamageBoost) {
                 bulletDamageBoost -= 10;
                 System.out.println("Bullet damage reduced: " + bulletDamageBoost);
             } else {

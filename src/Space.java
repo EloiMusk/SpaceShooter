@@ -33,6 +33,7 @@ public class Space extends World {
         runAnimationTimer();
         generateAmmunition();
         generateUpgrade();
+        alienFormation();
     }
 
     private void setNewCurrentBackground() {
@@ -269,7 +270,8 @@ public class Space extends World {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        if (getObjects(Alien.class).size() == 0) {
+        ArrayList<Alien> aliens = (ArrayList<Alien>) getObjects(Alien.class);
+        if (aliens.size() == 0) {
             levelUp();
         }
     }
@@ -277,6 +279,82 @@ public class Space extends World {
     public void generateAmmunition() {
         if (Greenfoot.getRandomNumber(200) < level) {
             addObject(new Ammunition(), Greenfoot.getRandomNumber(800), 0);
+        }
+    }
+
+    private void alienFormation() {
+        if (animationMilliSeconds % 30 == 0) {
+//        if (animationSeconds % 1 == 0) {
+            ArrayList<Alien> aliens = (ArrayList<Alien>) getObjects(Alien.class);
+            if (Greenfoot.getRandomNumber(100) < 50) {
+                alienFormation1(aliens);
+            } else if (Greenfoot.getRandomNumber(100) < 50) {
+                alienFormation1(aliens);
+            }
+            alienFormation3(aliens);
+        }
+
+//        else if (level % 3 == 0) {
+//            alienFormation2();
+//        } else if (level % 5 == 0) {
+//            alienFormation3();
+//        } else {
+//            alienFormation4();
+//        }
+    }
+
+    //    A horizontal line of aliens
+    private void alienFormation1(ArrayList<Alien> aliens) {
+        for (Alien alien : aliens) {
+            if (aliens.indexOf(alien) % 2 == 0) {
+                alien.finalX = aliens.indexOf(alien) * ((getWidth() - (getWidth() / 2)) / aliens.size()) + alien.getImage().getWidth();
+            } else {
+                alien.finalX = getWidth() - (aliens.indexOf(alien) * ((getWidth() - (getWidth() / 2)) / aliens.size()) + alien.getImage().getWidth());
+            }
+            alien.finalY = ((getHeight() / 2) / aliens.size()) * aliens.indexOf(alien) + alien.getImage().getHeight();
+        }
+    }
+
+    //    A U formation of aliens
+    private void alienFormation2(ArrayList<Alien> aliens) {
+        for (Alien alien : aliens) {
+            if (aliens.indexOf(alien) % 4 == 0) {
+                alien.finalX = aliens.indexOf(alien) * (getWidth() / aliens.size()) + alien.getImage().getWidth() / 2;
+                alien.finalY = getHeight() / 10 + alien.getImage().getHeight();
+            } else if (aliens.indexOf(alien) % 2 == 0) {
+                alien.finalX = aliens.indexOf(alien) * (getWidth() / aliens.size()) + alien.getImage().getWidth() / 2;
+                alien.finalY = getHeight() / 10 + alien.getImage().getHeight() * 2;
+            } else {
+                alien.finalX = aliens.indexOf(alien) * (getWidth() / aliens.size()) + alien.getImage().getWidth() / 2;
+                alien.finalY = getHeight() / 10;
+            }
+            alien.spawned = alien.getY() == alien.finalY && alien.getX() == alien.finalX;
+        }
+    }
+
+    // Set the finalX and finalY of each alien, so it results in a grid formation regardless of the number of aliens
+    private void alienFormation3(ArrayList<Alien> aliens) {
+        System.out.println("Formation 3");
+        int alienWidth = aliens.get(1).getImage().getWidth();
+        int alienHeight = aliens.get(1).getImage().getHeight();
+        int alienSpacing = alienWidth / 2;
+        int alienX = alienWidth / 2;
+        int alienY = alienHeight / 2;
+        for (Alien alien : aliens) {
+            alienX += alienWidth + alienSpacing;
+            if (alienX > getWidth() - getWidth() / 4) {
+                alienX = alienWidth / 2 + getWidth() / 4;
+                alienY += alienHeight + alienSpacing;
+            }
+            alien.finalX = alienX;
+            alien.finalY = alienY;
+        }
+    }
+
+    //    A random formation of aliens
+    private void alienFormation4() {
+        for (int i = 0; i < 10; i++) {
+            addObject(new Alien(), Greenfoot.getRandomNumber(800), Greenfoot.getRandomNumber(400));
         }
     }
 }
