@@ -282,25 +282,20 @@ public class Space extends World {
         }
     }
 
+    /**
+     * Rearranges the aliens in a formation randomly
+     */
     private void alienFormation() {
-        if (animationMilliSeconds % 30 == 0) {
-//        if (animationSeconds % 1 == 0) {
+        if (animationSeconds % 60 == 0) {
             ArrayList<Alien> aliens = (ArrayList<Alien>) getObjects(Alien.class);
-            if (Greenfoot.getRandomNumber(100) < 50) {
+            if (Greenfoot.getRandomNumber(100) < 30) {
+                alienFormation2(aliens);
+            } else if (Greenfoot.getRandomNumber(100) < 60) {
                 alienFormation1(aliens);
-            } else if (Greenfoot.getRandomNumber(100) < 50) {
-                alienFormation1(aliens);
+            } else if (Greenfoot.getRandomNumber(100) < 100 && aliens.size() > 0) {
+                alienFormation3(aliens);
             }
-            alienFormation3(aliens);
         }
-
-//        else if (level % 3 == 0) {
-//            alienFormation2();
-//        } else if (level % 5 == 0) {
-//            alienFormation3();
-//        } else {
-//            alienFormation4();
-//        }
     }
 
     //    A horizontal line of aliens
@@ -315,7 +310,11 @@ public class Space extends World {
         }
     }
 
-    //    A U formation of aliens
+    /**
+     * Zig zag like formation over the full width of the screen
+     *
+     * @param aliens ArrayList of aliens
+     */
     private void alienFormation2(ArrayList<Alien> aliens) {
         for (Alien alien : aliens) {
             if (aliens.indexOf(alien) % 4 == 0) {
@@ -334,9 +333,8 @@ public class Space extends World {
 
     // Set the finalX and finalY of each alien, so it results in a grid formation regardless of the number of aliens
     private void alienFormation3(ArrayList<Alien> aliens) {
-        System.out.println("Formation 3");
-        int alienWidth = aliens.get(1).getImage().getWidth();
-        int alienHeight = aliens.get(1).getImage().getHeight();
+        int alienWidth = aliens.get(0).getImage().getWidth();
+        int alienHeight = aliens.get(0).getImage().getHeight();
         int alienSpacing = alienWidth / 2;
         int alienX = alienWidth / 2;
         int alienY = alienHeight / 2;
@@ -348,13 +346,6 @@ public class Space extends World {
             }
             alien.finalX = alienX;
             alien.finalY = alienY;
-        }
-    }
-
-    //    A random formation of aliens
-    private void alienFormation4() {
-        for (int i = 0; i < 10; i++) {
-            addObject(new Alien(), Greenfoot.getRandomNumber(800), Greenfoot.getRandomNumber(400));
         }
     }
 }
