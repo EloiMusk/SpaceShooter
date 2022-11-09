@@ -8,14 +8,15 @@ public class Upgrade extends Actor {
     public Upgrade() {
         int random = Greenfoot.getRandomNumber(100);
         if (random < 50) {
-            this.upgradeType = UpgradeType.values()[Greenfoot.getRandomNumber(1)];
-        } else if (random < 75) {
+            this.upgradeType = UpgradeType.values()[Greenfoot.getRandomNumber(2)];
+        } else if (random < 80) {
             this.upgradeType = UpgradeType.values()[Greenfoot.getRandomNumber(5) + 2];
         } else if (random < 95) {
-            this.upgradeType = UpgradeType.values()[(Greenfoot.getRandomNumber(4) + 6)];
+            this.upgradeType = UpgradeType.values()[(Greenfoot.getRandomNumber(3) + 7)];
         } else {
             this.upgradeType = UpgradeType.NUKE;
         }
+        this.upgradeType = UpgradeType.NUKE;
         setImage("Upgrade/" + this.upgradeType.ordinal() + "/0.png");
     }
 

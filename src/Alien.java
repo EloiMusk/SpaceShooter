@@ -13,7 +13,7 @@ public class Alien extends Actor {
     public final int variant = Greenfoot.getRandomNumber(6) + 1;
     private final int[] maxAnimationFrames = {28, 35, 6, 3, 5, 11};
     private final double[] maxAnimationSpeed = {3, 2.5, 6, 10, 8, 4};
-    private boolean spawned = true;
+    public boolean spawned = false;
     private int finalY;
     private int finalX;
     int ySteps;
@@ -58,7 +58,7 @@ public class Alien extends Actor {
             setLocation(finalX, getY());
         }
         if (getX() == finalX && getY() == finalY) {
-            spawned = false;
+            spawned = true;
         }
     }
 
@@ -104,7 +104,7 @@ public class Alien extends Actor {
 
     public void spawnUpgrade() {
         try {
-            if ((difficulty >= 1 && Greenfoot.getRandomNumber(100) < 20) || (difficulty >= 5 && Greenfoot.getRandomNumber(100) < 50) || difficulty >= 10) {
+            if (true||(difficulty >= 1 && Greenfoot.getRandomNumber(100) < 20) || (difficulty >= 5 && Greenfoot.getRandomNumber(100) < 50) || difficulty >= 10) {
                 getWorld().addObject(new Upgrade(), getX(), getY());
             }
         } catch (Exception e) {
@@ -150,7 +150,7 @@ public class Alien extends Actor {
     public void act() {
         if (slideCounter >= 80) {
             setLocation(finalX, finalY);
-            spawned = false;
+            spawned = true;
         } else {
             slideCounter++;
         }
@@ -165,7 +165,7 @@ public class Alien extends Actor {
             }
             stepsSet = true;
         }
-        if (spawned) {
+        if (!spawned) {
             slideIn();
         } else {
             shoot();

@@ -22,7 +22,8 @@ public class SpaceShip extends Actor {
     private final SoundService shieldBreakSound = new SoundService("ShieldBreak/1.wav");
     private final SoundService powerUpSound = new SoundService("PowerUp/1.wav");
     public Map<UpgradeType, Boolean> activeUpgrades = new HashMap<>();
-    boolean camShoot = true;
+    boolean canShoot = true;
+    private int canShootDelay = 0;
 
     public SpaceShip() {
         setImage("SpaceShip/SpaceShip0.png");
@@ -71,7 +72,7 @@ public class SpaceShip extends Actor {
             }
         }
 //        TODO: Different shooting speed depending on bullet type
-        if (Greenfoot.isKeyDown("space") && !isShooting && camShoot) {
+        if (Greenfoot.isKeyDown("space") && !isShooting && canShoot) {
             if (this.ammunition > 0) {
                 for (int i = 0; i < this.bulletCount; i++) {
                     Bullet bullet = new Bullet(bulletType);
@@ -82,10 +83,11 @@ public class SpaceShip extends Actor {
                 }
                 isShooting = true;
                 this.ammunition--;
+                canShoot = false;
+                canShootDelay = 0;
             } else {
                 new SoundService("Bullet/NoAmmo/1.wav").playSound();
             }
-            camShoot = false;
         }
         if (!Greenfoot.isKeyDown("space") && isShooting) {
             isShooting = false;
@@ -95,15 +97,17 @@ public class SpaceShip extends Actor {
     public void isHit() {
         if (isTouching(Alien.class)) {
             Alien alien = (Alien) getOneIntersectingObject(Alien.class);
-            alien.hasDied = true;
-            getWorld().addObject(new AlienDeath(alien.variant), alien.getX(), alien.getY());
-            getWorld().removeObject(alien);
-            if (this.shield > 0) {
-                shieldBreakSound.playSound();
-                this.shield--;
-            } else {
-                heartBreakSound.playSound();
-                this.health--;
+            if (alien.spawned) {
+                alien.hasDied = true;
+                getWorld().addObject(new AlienDeath(alien.variant), alien.getX(), alien.getY());
+                getWorld().removeObject(alien);
+                if (this.shield > 0) {
+                    shieldBreakSound.playSound();
+                    this.shield--;
+                } else {
+                    heartBreakSound.playSound();
+                    this.health--;
+                }
             }
         }
         if (isTouching(Bullet.class)) {
@@ -221,21 +225,21 @@ public class SpaceShip extends Actor {
     }
 
     private void coolDown() {
-//      Every 1.6s and a bit seconds
-        if (Space.animationSeconds % 100 == 0) {
+        if (Space.animationSeconds % (60 / 1.5) == 0) {
             if (this.ammunition < maxAmmunition) {
                 this.ammunition += (Space.level / 2) + 1;
             }
         }
-//        Every 500 or something milliseconds
-        if (Space.animationSeconds % 40 == 0) {
+
+        if (Space.animationSeconds % (60 / 0.5) == 0) {
             if (movementSpeed > 0) {
                 movementSpeed--;
             } else {
                 activeUpgrades.put(UpgradeType.MOVEMENT_SPEED, false);
             }
         }
-        if (Space.animationSeconds % 50 == 0) {
+
+        if (Space.animationSeconds % (60 / 0.8) == 0) {
             if (bulletCount > 1) {
                 bulletCount -= 0.2;
             } else {
@@ -260,12 +264,18 @@ public class SpaceShip extends Actor {
                 activeUpgrades.put(UpgradeType.BULLET_SIZE, false);
             }
         }
-        if (bulletType > 1 && Space.animationSeconds % (60 * BulletData.getBullet(bulletType).coolDown) == 0) {
+
+        if (bulletType > 1 && BulletData.getBullet(bulletType).coolDown * 60 > bulletCoolDown) {
+            bulletCoolDown++;
+        } else {
             bulletType = 1;
             resetBulletType();
+            bulletCoolDown = 0;
         }
-        if (Space.animationMilliSeconds % (60 / BulletData.getBullet(bulletType).fireRate) == 0) {
-            camShoot = true;
+        if (canShootDelay < 60 / BulletData.getBullet(bulletType).fireRate && !canShoot) {
+            canShootDelay++;
+        } else {
+            canShoot = true;
         }
 
     }
