@@ -1,0 +1,268 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>JAVA</ID>
+  <OriginalElement>C:/Users/TAATEEL1/IdeaProjects/SpaceShooter/src</OriginalElement>
+  <nodes>
+    <node x="1671.0" y="-15.0">dataTypes.Score</node>
+    <node x="934.0" y="682.0">Fog</node>
+    <node x="793.0" y="951.0">Space</node>
+    <node x="-106.0" y="660.0">UI</node>
+    <node x="757.496268237935" y="-15.0">SoundService</node>
+    <node x="548.0" y="1160.0">LeaderBoardComponent</node>
+    <node x="779.0" y="693.0">Ammunition</node>
+    <node x="1254.0" y="693.0">Button</node>
+    <node x="460.0" y="1008.0">BulletData</node>
+    <node x="1561.0" y="89.0">DbService</node>
+    <node x="156.25" y="378.0">Upgrade</node>
+    <node x="1097.0" y="682.0">Star</node>
+    <node x="357.25" y="323.0">Bullet</node>
+    <node x="693.5" y="1551.0">Menu</node>
+    <node x="567.0" y="616.0">SpaceShip</node>
+    <node x="-68.0" y="400.0">UpgradeIcon</node>
+    <node x="563.25" y="400.0">AlienDeath</node>
+    <node x="313.3987373737374" y="615.0">Alien</node>
+    <node x="337.0" y="1171.0">GameState</node>
+    <node x="1545.0" y="-15.0">dataTypes.Settings</node>
+    <node x="1321.096268237935" y="412.0">Button.OnClick</node>
+    <node x="91.5129349046017" y="64.0">UpgradeType</node>
+  </nodes>
+  <notes />
+  <edges>
+    <edge source="Menu" target="Space" relationship="CREATE">
+      <point x="15.666666666666629" y="-127.0" />
+      <point x="803.1666666666666" y="1511.0" />
+      <point x="858.25" y="1511.0" />
+      <point x="-65.25" y="270.0" />
+    </edge>
+    <edge source="Space" target="Menu" relationship="CREATE">
+      <point x="65.25" y="270.0" />
+      <point x="988.75" y="1521.0" />
+      <point x="834.5" y="1521.0" />
+      <point x="47.0" y="-127.0" />
+    </edge>
+    <edge source="Space" target="SoundService" relationship="CREATE">
+      <point x="47.454545454545496" y="-270.0" />
+      <point x="970.9545454545455" y="901.0" />
+      <point x="1086.5" y="901.0" />
+      <point x="1086.5" y="293.0" />
+      <point x="919.996268237935" y="293.0" />
+      <point x="75.0" y="129.0" />
+    </edge>
+    <edge source="Alien" target="Bullet" relationship="CREATE">
+      <point x="0.0" y="-128.0" />
+      <point x="419.8987373737374" y="595.0" />
+      <point x="403.75" y="595.0" />
+      <point x="-46.5" y="116.0" />
+    </edge>
+    <edge source="Space" target="UI" relationship="CREATE">
+      <point x="-118.63636363636363" y="-270.0" />
+      <point x="804.8636363636364" y="931.0" />
+      <point x="33.5" y="931.0" />
+      <point x="0.0" y="83.0" />
+    </edge>
+    <edge source="Bullet" target="SoundService" relationship="CREATE">
+      <point x="46.5" y="-116.0" />
+      <point x="496.75" y="273.0" />
+      <point x="794.996268237935" y="273.0" />
+      <point x="-50.0" y="129.0" />
+    </edge>
+    <edge source="Space" target="Alien" relationship="CREATE">
+      <point x="-71.18181818181813" y="-270.0" />
+      <point x="852.3181818181819" y="911.0" />
+      <point x="419.8987373737374" y="911.0" />
+      <point x="0.0" y="128.0" />
+    </edge>
+    <edge source="UI" target="UpgradeIcon" relationship="CREATE">
+      <point x="-69.75" y="-83.0" />
+      <point x="-36.25" y="595.0" />
+      <point x="-17.25" y="595.0" />
+      <point x="-50.75" y="39.0" />
+    </edge>
+    <edge source="Upgrade" target="UpgradeType" relationship="TO_ONE">
+      <point x="0.0" y="-61.0" />
+      <point x="246.25" y="303.0" />
+      <point x="194.5129349046017" y="303.0" />
+      <point x="0.0" y="50.0" />
+    </edge>
+    <edge source="DbService" target="dataTypes.Score" relationship="CREATE">
+      <point x="57.0" y="-106.0" />
+      <point x="1732.0" y="64.0" />
+      <point x="1752.0" y="64.0" />
+      <point x="0.0" y="27.0" />
+    </edge>
+    <edge source="Space" target="Button" relationship="TO_ONE">
+      <point x="94.90909090909088" y="-270.0" />
+      <point x="1018.409090909091" y="921.0" />
+      <point x="1295.0" y="921.0" />
+      <point x="-82.0" y="50.0" />
+    </edge>
+    <edge source="SpaceShip" target="SoundService" relationship="TO_ONE">
+      <point x="76.79999999999995" y="-127.0" />
+      <point x="739.8" y="595.0" />
+      <point x="815.125" y="595.0" />
+      <point x="815.125" y="303.0" />
+      <point x="869.996268237935" y="303.0" />
+      <point x="25.0" y="129.0" />
+    </edge>
+    <edge source="Menu" target="GameState" relationship="TO_ONE">
+      <point x="-78.33333333333326" y="-127.0" />
+      <point x="709.1666666666667" y="1531.0" />
+      <point x="432.5" y="1531.0" />
+      <point x="0.0" y="50.0" />
+    </edge>
+    <edge source="Menu" target="LeaderBoardComponent" relationship="CREATE">
+      <point x="-15.666666666666629" y="-127.0" />
+      <point x="771.8333333333334" y="1511.0" />
+      <point x="716.75" y="1511.0" />
+      <point x="56.25" y="61.0" />
+    </edge>
+    <edge source="Space" target="SoundService" relationship="TO_ONE">
+      <point x="0.0" y="-270.0" />
+      <point x="923.5" y="303.0" />
+      <point x="894.996268237935" y="303.0" />
+      <point x="50.0" y="129.0" />
+    </edge>
+    <edge source="Bullet" target="SoundService" relationship="TO_ONE">
+      <point x="-46.5" y="-116.0" />
+      <point x="403.75" y="263.0" />
+      <point x="769.996268237935" y="263.0" />
+      <point x="-75.0" y="129.0" />
+    </edge>
+    <edge source="UI" target="UpgradeIcon" relationship="TO_MANY">
+      <point x="69.75" y="-83.0" />
+      <point x="103.25" y="595.0" />
+      <point x="84.25" y="595.0" />
+      <point x="50.75" y="39.0" />
+    </edge>
+    <edge source="Alien" target="AlienDeath" relationship="CREATE">
+      <point x="71.0" y="-128.0" />
+      <point x="490.8987373737374" y="595.0" />
+      <point x="596.5" y="595.0" />
+      <point x="-33.25" y="39.0" />
+    </edge>
+    <edge source="Menu" target="Button" relationship="CREATE">
+      <point x="78.33333333333337" y="-127.0" />
+      <point x="865.8333333333334" y="1531.0" />
+      <point x="1404.0280864197532" y="1531.0" />
+      <point x="1404.0280864197532" y="931.0" />
+      <point x="1459.0" y="931.0" />
+      <point x="82.0" y="50.0" />
+    </edge>
+    <edge source="UpgradeIcon" target="UpgradeType" relationship="TO_ONE">
+      <point x="0.0" y="-39.0" />
+      <point x="33.5" y="303.0" />
+      <point x="125.84626823793508" y="303.0" />
+      <point x="-68.66666666666667" y="50.0" />
+    </edge>
+    <edge source="SpaceShip" target="AlienDeath" relationship="CREATE">
+      <point x="0.0" y="-127.0" />
+      <point x="33.25" y="39.0" />
+    </edge>
+    <edge source="Button" target="Button.OnClick" relationship="TO_ONE">
+      <point x="-61.5" y="-50.0" />
+      <point x="1315.5" y="595.0" />
+      <point x="1351.846268237935" y="595.0" />
+      <point x="-30.75" y="27.0" />
+    </edge>
+    <edge source="Button.OnClick" target="Button" relationship="INNER_CLASS">
+      <point x="30.75" y="27.0" />
+      <point x="1413.346268237935" y="595.0" />
+      <point x="1438.5" y="595.0" />
+      <point x="61.5" y="-50.0" />
+    </edge>
+    <edge source="DbService" target="dataTypes.Settings" relationship="CREATE">
+      <point x="-57.0" y="-106.0" />
+      <point x="1618.0" y="64.0" />
+      <point x="1598.0" y="64.0" />
+      <point x="0.0" y="27.0" />
+    </edge>
+    <edge source="Alien" target="Upgrade" relationship="CREATE">
+      <point x="-71.0" y="-128.0" />
+      <point x="348.8987373737374" y="595.0" />
+      <point x="291.25" y="595.0" />
+      <point x="45.0" y="61.0" />
+    </edge>
+    <edge source="Space" target="SpaceShip" relationship="CREATE">
+      <point x="-47.454545454545496" y="-270.0" />
+      <point x="876.0454545454545" y="901.0" />
+      <point x="663.0" y="901.0" />
+      <point x="0.0" y="127.0" />
+    </edge>
+    <edge source="Space" target="Button" relationship="CREATE">
+      <point x="118.63636363636351" y="-270.0" />
+      <point x="1042.1363636363635" y="931.0" />
+      <point x="1377.0" y="931.0" />
+      <point x="0.0" y="50.0" />
+    </edge>
+    <edge source="Space" target="Upgrade" relationship="CREATE">
+      <point x="-94.90909090909088" y="-270.0" />
+      <point x="828.5909090909091" y="921.0" />
+      <point x="201.25" y="921.0" />
+      <point x="-45.0" y="61.0" />
+    </edge>
+    <edge source="AlienDeath" target="SoundService" relationship="CREATE">
+      <point x="0.0" y="-39.0" />
+      <point x="629.75" y="283.0" />
+      <point x="819.996268237935" y="283.0" />
+      <point x="-25.0" y="129.0" />
+    </edge>
+    <edge source="Space" target="Star" relationship="CREATE">
+      <point x="71.18181818181813" y="-270.0" />
+      <point x="994.681818181818" y="911.0" />
+      <point x="1165.5" y="911.0" />
+      <point x="0.0" y="61.0" />
+    </edge>
+    <edge source="SpaceShip" target="Bullet" relationship="CREATE">
+      <point x="-38.40000000000009" y="-127.0" />
+      <point x="624.5999999999999" y="575.0" />
+      <point x="496.75" y="575.0" />
+      <point x="46.5" y="116.0" />
+    </edge>
+    <edge source="Space" target="Ammunition" relationship="CREATE">
+      <point x="-23.727272727272748" y="-270.0" />
+      <point x="899.7727272727273" y="891.0" />
+      <point x="846.0" y="891.0" />
+      <point x="0.0" y="50.0" />
+    </edge>
+    <edge source="SpaceShip" target="UpgradeType" relationship="TO_MANY">
+      <point x="-76.80000000000007" y="-127.0" />
+      <point x="586.1999999999999" y="585.0" />
+      <point x="346.75" y="585.0" />
+      <point x="346.75" y="303.0" />
+      <point x="263.1796015712684" y="303.0" />
+      <point x="68.66666666666669" y="50.0" />
+    </edge>
+    <edge source="Menu" target="LeaderBoardComponent" relationship="TO_ONE">
+      <point x="-47.0" y="-127.0" />
+      <point x="740.5" y="1521.0" />
+      <point x="604.25" y="1521.0" />
+      <point x="-56.25" y="61.0" />
+    </edge>
+    <edge source="Space" target="Fog" relationship="CREATE">
+      <point x="23.727272727272748" y="-270.0" />
+      <point x="947.2272727272727" y="891.0" />
+      <point x="1005.0" y="891.0" />
+      <point x="0.0" y="61.0" />
+    </edge>
+    <edge source="SpaceShip" target="SoundService" relationship="CREATE">
+      <point x="38.39999999999998" y="-127.0" />
+      <point x="701.4" y="585.0" />
+      <point x="804.125" y="585.0" />
+      <point x="804.125" y="293.0" />
+      <point x="844.996268237935" y="293.0" />
+      <point x="0.0" y="129.0" />
+    </edge>
+  </edges>
+  <settings layout="Hierarchic" zoom="0.3413143148242487" showDependencies="true" x="873.5" y="966.5" />
+  <SelectedNodes />
+  <Categories>
+    <Category>Constructors</Category>
+    <Category>Fields</Category>
+    <Category>Inner Classes</Category>
+    <Category>Methods</Category>
+    <Category>Properties</Category>
+  </Categories>
+  <SCOPE>All</SCOPE>
+  <VISIBILITY>private</VISIBILITY>
+</Diagram>
+

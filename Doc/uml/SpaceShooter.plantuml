@@ -1,0 +1,216 @@
+@startuml
+
+!theme plain
+top to bottom direction
+skinparam linetype ortho
+
+class Alien {
+  + Alien(): 
+  + Alien(int, int, int): 
+  - animation(): void
+  - lcm(int, int): float
+  + isHit(): void
+  - shoot(): void
+  - getFrame(int): GreenfootImage
+  - slideIn(): void
+  + spawnUpgrade(): void
+  + act(): void
+   dead: boolean
+}
+class AlienDeath {
+  + AlienDeath(int): 
+  + act(): void
+}
+class Ammunition {
+  + Ammunition(): 
+  - animate(): void
+  + act(): void
+}
+class Bullet {
+  + Bullet(int): 
+  + Bullet(int, boolean): 
+  - explode(): void
+  - init(): void
+  - checkSurroundings(): void
+  + startExplosion(): void
+  + act(): void
+  - moveOneStep(): void
+  - animation(): void
+}
+class BulletData {
+  + BulletData(int, int, int, int, int, int, int, int, int, int, int): 
+  + getBullet(int): BulletData
+}
+class Button {
+  + Button(String, Color, Color, OnClick): 
+  - init(): void
+  + act(): void
+}
+class DbService {
+  + DbService(): 
+  + close(): void
+  + connect(): void
+  + addScore(String, int): boolean
+  + updateSettings(Settings): boolean
+  + toggleMute(): void
+   settings: Settings
+   scores: ArrayList<Score>
+}
+class Fog {
+  + Fog(int): 
+  + moveOnce(): void
+  + act(): void
+  - animation(): void
+}
+enum GameState << enumeration >> {
+  + GameState(): 
+  + valueOf(String): GameState
+  + values(): GameState[]
+}
+class LeaderBoardComponent {
+  + LeaderBoardComponent(World): 
+  + LeaderBoardComponent(int, int): 
+  + refresh(): void
+  - init(int, int): void
+}
+class Menu {
+  + Menu(): 
+  + Menu(GameState): 
+  - init(): void
+  + refresh(): void
+  + act(): void
+  - clearAll(): void
+  - generateGameOver(): void
+  - addScore(): void
+  - generateGameStart(): void
+  - onClick(): void
+}
+interface OnClick << interface >> {
+  + onClick(): void
+}
+class Score {
+  + Score(String, int, int): 
+}
+class Settings {
+  + Settings(): 
+}
+class SoundService {
+  + SoundService(): 
+  + SoundService(String): 
+  ~ sound: GreenfootSound
+  + playSound(String): void
+  + playSound(): void
+  + setSound(): void
+  + stopSound(): void
+  + setVolume(): void
+   sound: String
+   playing: boolean
+}
+class Space {
+  + Space(): 
+  + generateAmmunition(): void
+  - setNewCurrentBackground(): void
+  - decrementAnimationSeconds(): void
+  + addScore(int): void
+  + gameOver(): void
+  - levelUp(): void
+  - toggleMute(): void
+  + refreshGameStats(): void
+  - alienFormation(): void
+  - decrementAnimationMilliseconds(): void
+  - generateAliens(): void
+  - playRandomBackgroundMusic(): void
+  - runAnimationTimer(): void
+  + startGame(): void
+  - generateUpgrade(): void
+  - alienFormation1(ArrayList<Alien>): void
+  - alienFormation3(ArrayList<Alien>): void
+  - generateBackground(): void
+  - decrementAnimationMinutes(): void
+  + act(): void
+  - refreshBackground(): void
+  - alienFormation2(ArrayList<Alien>): void
+}
+class SpaceShip {
+  + SpaceShip(): 
+  - animation(): void
+  - playDeathAnimation(): void
+  - coolDown(): void
+  + act(): void
+  + controls(): void
+  - init(): void
+  - resetBulletType(): void
+  + isHitByUpgrade(): void
+  + isHit(): void
+}
+class Star {
+  + Star(int): 
+  + Star(): 
+  - animation(): void
+  + act(): void
+}
+class UI {
+  + UI(): 
+  - getHealthImage(int): GreenfootImage
+  + refreshUI(): void
+  - getAmmunitionImage(int): GreenfootImage
+  + act(): void
+  - getShieldImage(int): GreenfootImage
+}
+class Upgrade {
+  + Upgrade(UpgradeType): 
+  + Upgrade(): 
+  + act(): void
+  - animate(): void
+}
+class UpgradeIcon {
+  + UpgradeIcon(UpgradeType): 
+  + nextFrame(): void
+}
+enum UpgradeType << enumeration >> {
+  + UpgradeType(): 
+  + values(): UpgradeType[]
+  + valueOf(String): UpgradeType
+}
+
+Alien                 -[#595959,dashed]->  AlienDeath           : "«create»"
+Alien                 -[#595959,dashed]->  Bullet               : "«create»"
+Alien                 -[#595959,dashed]->  Upgrade              : "«create»"
+AlienDeath            -[#595959,dashed]->  SoundService         : "«create»"
+Bullet               "1" *-[#595959,plain]-> "bulletSound\n1" SoundService         
+Bullet                -[#595959,dashed]->  SoundService         : "«create»"
+BulletData           "1" *-[#595959,plain]-> "bullets\n*" BulletData           
+BulletData            -[#595959,dashed]->  BulletData           : "«create»"
+Button               "1" *-[#595959,plain]-> "onClick\n1" OnClick              
+DbService             -[#595959,dashed]->  Score                : "«create»"
+DbService             -[#595959,dashed]->  Settings             : "«create»"
+Fog                   -[#595959,dashed]->  Fog                  : "«create»"
+Menu                  -[#595959,dashed]->  Button               : "«create»"
+Menu                 "1" *-[#595959,plain]-> "gameState\n1" GameState            
+Menu                 "1" *-[#595959,plain]-> "leaderboard\n1" LeaderBoardComponent 
+Menu                  -[#595959,dashed]->  LeaderBoardComponent : "«create»"
+Menu                  -[#595959,dashed]->  Space                : "«create»"
+OnClick               +-[#820000,plain]-  Button               
+Space                 -[#595959,dashed]->  Alien                : "«create»"
+Space                 -[#595959,dashed]->  Ammunition           : "«create»"
+Space                "1" *-[#595959,plain]-> "toggleMute\n1" Button               
+Space                 -[#595959,dashed]->  Button               : "«create»"
+Space                 -[#595959,dashed]->  Fog                  : "«create»"
+Space                 -[#595959,dashed]->  Menu                 : "«create»"
+Space                "1" *-[#595959,plain]-> "backgroundMusic\n1" SoundService         
+Space                 -[#595959,dashed]->  SoundService         : "«create»"
+Space                 -[#595959,dashed]->  SpaceShip            : "«create»"
+Space                 -[#595959,dashed]->  Star                 : "«create»"
+Space                 -[#595959,dashed]->  UI                   : "«create»"
+Space                 -[#595959,dashed]->  Upgrade              : "«create»"
+SpaceShip             -[#595959,dashed]->  AlienDeath           : "«create»"
+SpaceShip             -[#595959,dashed]->  Bullet               : "«create»"
+SpaceShip            "1" *-[#595959,plain]-> "heartBreakSound\n1" SoundService         
+SpaceShip             -[#595959,dashed]->  SoundService         : "«create»"
+SpaceShip            "1" *-[#595959,plain]-> "activeUpgrades\n*" UpgradeType          
+Star                  -[#595959,dashed]->  Star                 : "«create»"
+UI                   "1" *-[#595959,plain]-> "upgradeIcons\n*" UpgradeIcon          
+UI                    -[#595959,dashed]->  UpgradeIcon          : "«create»"
+Upgrade              "1" *-[#595959,plain]-> "upgradeType\n1" UpgradeType          
+UpgradeIcon          "1" *-[#595959,plain]-> "upgradeType\n1" UpgradeType          
+@enduml
