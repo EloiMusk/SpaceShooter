@@ -1,6 +1,6 @@
 ﻿# Space Shooter
 
-![GitHub release (latest by date)](https://img.shields.io/github/v/release/EloiMusk/SpaceShooter) ![GitHub release (latest by date and asset)](https://img.shields.io/github/downloads/EloiMusk/SpaceShooter/latest/SpaceShooter.gfar)
+[![GitHub release (latest by date)](https://img.shields.io/github/v/release/EloiMusk/SpaceShooter)](https://github.com/EloiMusk/SpaceShooter/releases/latest) [![GitHub release (latest by date and asset)](https://img.shields.io/github/downloads/EloiMusk/SpaceShooter/latest/SpaceShooter.gfar)](https://github.com/EloiMusk/SpaceShooter/releases/latest/download/SpaceShooter.gfar)
 
 The game is still under development. Feel free to contribute or try it out. To see how you can set it up locally, please see the [Setup](#Setup) chapter.
 
