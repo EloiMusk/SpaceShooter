@@ -265,7 +265,7 @@ public class Space extends World {
         getObjects(SpaceShip.class).get(0).maxAmmunition += level * 2;
         getObjects(SpaceShip.class).get(0).ammunition = getObjects(SpaceShip.class).get(0).maxAmmunition;
         SoundService levelUpSound = new SoundService();
-        levelUpSound.playSound("LevelUp/1.wav");
+        levelUpSound.playSound("LevelUp/1.mp3");
         for (Upgrade upgrade : getObjects(Upgrade.class)) {
             removeObject(upgrade);
         }
@@ -346,7 +346,7 @@ public class Space extends World {
      */
     public void gameOver() {
         backgroundMusic.stopSound();
-        new SoundService().playSound("GameOver/1.wav");
+        new SoundService().playSound("GameOver/1.mp3");
         Greenfoot.setWorld(new Menu(GameState.GAME_OVER));
     }
 

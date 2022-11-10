@@ -24,11 +24,11 @@ public class AlienDeath extends Actor {
     public AlienDeath(int variation) {
         this.variant = variation;
         if (variant <= 3) {
-            SoundService deathSound = new SoundService("DeathExplosion/AlienOrganic/1.wav");
+            SoundService deathSound = new SoundService("DeathExplosion/AlienOrganic/1.mp3");
             deathSound.volumeOffset = 10;
             deathSound.playSound();
         } else {
-            new SoundService("DeathExplosion/AlienMetal/1.wav").playSound();
+            new SoundService("DeathExplosion/AlienMetal/1.mp3").playSound();
         }
 
     }

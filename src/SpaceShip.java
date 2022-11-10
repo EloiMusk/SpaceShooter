@@ -70,15 +70,15 @@ public class SpaceShip extends Actor {
     /**
      * Instance of the SoundService for the heartBreak sound.
      */
-    private final SoundService heartBreakSound = new SoundService("HeartBreak/1.wav");
+    private final SoundService heartBreakSound = new SoundService("HeartBreak/1.mp3");
     /**
      * Instance of the SoundService for the shieldBreak sound.
      */
-    private final SoundService shieldBreakSound = new SoundService("ShieldBreak/1.wav");
+    private final SoundService shieldBreakSound = new SoundService("ShieldBreak/1.mp3");
     /**
      * Instance of the SoundService for the powerUp sound.
      */
-    private final SoundService powerUpSound = new SoundService("PowerUp/1.wav");
+    private final SoundService powerUpSound = new SoundService("PowerUp/1.mp3");
     /**
      * Hashmap which stores all Upgrade types and if they are active.
      */
@@ -170,7 +170,7 @@ public class SpaceShip extends Actor {
                 canShoot = false;
                 canShootDelay = 0;
             } else {
-                new SoundService("Bullet/NoAmmo/1.wav").playSound();
+                new SoundService("Bullet/NoAmmo/1.mp3").playSound();
             }
         }
 //        If space is not pressed, the spaceship is not shooting.
@@ -224,7 +224,7 @@ public class SpaceShip extends Actor {
      * Plays the death animation of the spaceship.
      */
     private void playDeathAnimation() {
-        new SoundService("DeathExplosion/SpaceShip/1.wav").playSound();
+        new SoundService("DeathExplosion/SpaceShip/1.mp3").playSound();
         for (int i = 0; i <= 14; i++) {
             setImage("DeathExplosion/SpaceShip/" + String.format("%02d", i) + ".png");
             getImage().scale(100, 100);
