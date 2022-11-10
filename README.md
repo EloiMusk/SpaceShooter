@@ -1,6 +1,6 @@
 ﻿# Space Shooter
 
-![GitHub release (latest by date)](https://img.shields.io/github/v/release/EloiMusk/SpaceShooter)![GitHub release (latest by date and asset)](https://img.shields.io/github/downloads/EloiMusk/SpaceShooter/latest/SpaceShooter.gfar) 
+![GitHub release (latest by date)](https://img.shields.io/github/v/release/EloiMusk/SpaceShooter) ![GitHub release (latest by date and asset)](https://img.shields.io/github/downloads/EloiMusk/SpaceShooter/latest/SpaceShooter.gfar)
 
 The game is still under development. Feel free to contribute or try it out. To see how you can set it up locally, please see the [Setup](#Setup) chapter.
 
@@ -15,8 +15,6 @@ After defeating each wave, the game is getting harder and harder.
 The main goal is to get the highest score of all time, but if you the player dies, he has to start all over again.
 
 # Setup
-
-![GitHub release (latest by date and asset)](https://img.shields.io/github/downloads/EloiMusk/SpaceShooter/latest/SpaceShooter.gfar) 
 
 1. Download the .gfar file from the latest Release. Open the downloaded file with Greenfoot
 
