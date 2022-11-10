@@ -4,10 +4,6 @@
 
 The game is still under development. Feel free to contribute or try it out. To see how you can set it up locally, please see the [Setup](#Setup) chapter.
 
-[TOC]
-
-
-
 # Introduction
 Space Shooter is a 2D game, in which the player, playing as a heavily armed spaceship, has to defeat waves of aliens. 
 In order to survive, there are different powerups, health and shield items, which can be collected after killing the aliens. 
