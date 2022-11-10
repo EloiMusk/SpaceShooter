@@ -1,31 +1,80 @@
 import dataTypes.Settings;
 import greenfoot.*;
-import javafx.scene.layout.Background;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.List;
 
+/**
+ * Space is the world in which the game takes place.
+ *
+ * @author EloiMusk
+ * @version 1.0
+ */
 public class Space extends World {
+    /**
+     * The level of the game.
+     *
+     * @default 1
+     */
     public static int level = 1;
+    /**
+     * Current value of the animationMilliSeconds counter.
+     *
+     * @maxValue 60
+     */
     public static int animationMilliSeconds;
+    /**
+     * Current value of the animationSeconds counter.
+     *
+     * @maxValue 3600
+     */
     public static int animationSeconds;
+    /**
+     * Current value of the animationMinutes counter.
+     *
+     * @maxValue 216000
+     */
     public static int animationMinutes;
+    /**
+     * The score of the game.
+     */
     public static int score = 0;
+    /**
+     * Toggle Button for the sound.
+     */
     private Button toggleMute;
+    /**
+     * The current volume of the game.
+     */
     public static int volume = 80;
+    /**
+     * Whether the game is muted or not.
+     */
     private boolean muted = false;
+    /**
+     * Instance of the SoundService for the background music.
+     */
     public final SoundService backgroundMusic = new SoundService();
+    /**
+     * The current value of the scroll progress.
+     */
     private int backgroundScroll = 0;
+    /**
+     * Instance of GreenfootImage for the background.
+     */
     private GreenfootImage currentBackground;
 
+    /**
+     * Constructor for objects of class Space.
+     */
     public Space() {
         super(800, 600, 1, false);
         startGame();
     }
 
-    int currBg = 1;
-
+    /**
+     * Calls all the methods to run the game.
+     */
     public void act() {
         setPaintOrder(Button.class, UI.class, SpaceShip.class, Bullet.class, Alien.class, Upgrade.class, Ammunition.class, Fog.class, Star.class);
         refreshBackground();
@@ -36,25 +85,9 @@ public class Space extends World {
         alienFormation();
     }
 
-    private void setNewCurrentBackground() {
-        currentBackground = new GreenfootImage("Background/" + (Greenfoot.getRandomNumber(13) + 1) + ".png");
-        float scale = (float) getHeight() / (float) currentBackground.getHeight();
-        currentBackground.scale((int) (scale * (float) currentBackground.getWidth()), getHeight());
-        switch (Greenfoot.getRandomNumber(4) + 1) {
-            case 1:
-                this.currentBackground.rotate(90);
-                break;
-            case 2:
-                this.currentBackground.rotate(180);
-                break;
-            case 3:
-                this.currentBackground.rotate(270);
-                break;
-            default:
-                break;
-        }
-    }
-
+    /**
+     * Starts the game. And builds the HUD.
+     */
     public void startGame() {
         setNewCurrentBackground();
         try {
@@ -80,6 +113,31 @@ public class Space extends World {
         generateBackground();
     }
 
+    /**
+     * Generates a random background image.
+     */
+    private void setNewCurrentBackground() {
+        currentBackground = new GreenfootImage("Background/" + (Greenfoot.getRandomNumber(13) + 1) + ".png");
+        float scale = (float) getHeight() / (float) currentBackground.getHeight();
+        currentBackground.scale((int) (scale * (float) currentBackground.getWidth()), getHeight());
+        switch (Greenfoot.getRandomNumber(4) + 1) {
+            case 1:
+                this.currentBackground.rotate(90);
+                break;
+            case 2:
+                this.currentBackground.rotate(180);
+                break;
+            case 3:
+                this.currentBackground.rotate(270);
+                break;
+            default:
+                break;
+        }
+    }
+
+    /**
+     * Toggle the mute of the game.
+     */
     private void toggleMute() {
         try {
             DbService.toggleMute();
@@ -88,6 +146,10 @@ public class Space extends World {
         }
     }
 
+    /**
+     * AnimationMilliSeconds counter. Decreases every act.
+     * <p>1s = 60 increments</p>
+     */
     private void decrementAnimationMilliseconds() {
         if (animationMilliSeconds > 0) {
             animationMilliSeconds--;
@@ -96,6 +158,10 @@ public class Space extends World {
         }
     }
 
+    /**
+     * AnimationSeconds counter. Decreases every act.
+     * <p>1m = 60 increments</p>
+     */
     private void decrementAnimationSeconds() {
         if (animationSeconds > 0) {
             animationSeconds--;
@@ -104,6 +170,10 @@ public class Space extends World {
         }
     }
 
+    /**
+     * AnimationMinutes counter. Decreases every act.
+     * <p>1h = 60 increments</p>
+     */
     private void decrementAnimationMinutes() {
         if (animationMinutes > 0) {
             animationMinutes--;
@@ -112,16 +182,27 @@ public class Space extends World {
         }
     }
 
+    /**
+     * Runs the animation timers.
+     */
     private void runAnimationTimer() {
         decrementAnimationMilliseconds();
         decrementAnimationSeconds();
         decrementAnimationMinutes();
     }
 
+    /**
+     * Adds the scored points to the score.
+     *
+     * @param points The points to add.
+     */
     public void addScore(int points) {
         score += points;
     }
 
+    /**
+     * Generates a grid of aliens.
+     */
     private void generateAliens() {
         for (int r = 0; r < 3; r++) {
             for (int c = 0; c < 10; c++) {
@@ -138,6 +219,9 @@ public class Space extends World {
         }
     }
 
+    /**
+     * Generates a random background with stars and fog.
+     */
     private void generateBackground() {
         setPaintOrder(Button.class, UI.class, SpaceShip.class, Bullet.class, Alien.class, Upgrade.class, Fog.class, Star.class);
         for (int i = 0; i < 20; i++) {
@@ -146,6 +230,9 @@ public class Space extends World {
         }
     }
 
+    /**
+     * Refreshes the background image to create a scrolling effect.
+     */
     private void refreshBackground() {
         GreenfootImage background = new GreenfootImage(getHeight(), getWidth());
         if (backgroundScroll > getHeight()) {
@@ -159,6 +246,9 @@ public class Space extends World {
         }
     }
 
+    /**
+     * Plays a random background music.
+     */
     private void playRandomBackgroundMusic() {
         String file = "Music/" + (Greenfoot.getRandomNumber(10) + 1) + ".mp3";
         if (backgroundMusic.isPlaying()) {
@@ -167,6 +257,9 @@ public class Space extends World {
         backgroundMusic.playSound(file);
     }
 
+    /**
+     * Called when the level is completed. Creates a transition to the next level with the fog.
+     */
     private void levelUp() {
         ArrayList<Fog> fogs = (ArrayList<Fog>) getObjects(Fog.class);
         getObjects(SpaceShip.class).get(0).maxAmmunition += level * 2;
@@ -231,6 +324,9 @@ public class Space extends World {
         playRandomBackgroundMusic();
     }
 
+    /**
+     * Generates random upgrades.
+     */
     private void generateUpgrade() {
         if (animationMilliSeconds == 0) {
             if (level > 2 && Greenfoot.getRandomNumber(100) < 10) {
@@ -245,12 +341,18 @@ public class Space extends World {
         }
     }
 
+    /**
+     * Called when the player dies. Plays a sound and changes back to the Menu.
+     */
     public void gameOver() {
         backgroundMusic.stopSound();
         new SoundService().playSound("GameOver/1.wav");
         Greenfoot.setWorld(new Menu(GameState.GAME_OVER));
     }
 
+    /**
+     * Refreshes the HUD with the current values.
+     */
     public void refreshGameStats() {
         try {
             Settings settings = DbService.getSettings();
@@ -276,6 +378,9 @@ public class Space extends World {
         }
     }
 
+    /**
+     * Generates random ammunition.
+     */
     public void generateAmmunition() {
         if (Greenfoot.getRandomNumber(200) < level) {
             addObject(new Ammunition(), Greenfoot.getRandomNumber(800), 0);
@@ -283,7 +388,7 @@ public class Space extends World {
     }
 
     /**
-     * Rearranges the aliens in a formation randomly
+     * Rearranges the aliens in a new formation.
      */
     private void alienFormation() {
         if (animationSeconds % 60 == 0) {
@@ -298,7 +403,11 @@ public class Space extends World {
         }
     }
 
-    //    A horizontal line of aliens
+    /**
+     * Generates a V formation.
+     *
+     * @param aliens The aliens to arrange.
+     */
     private void alienFormation1(ArrayList<Alien> aliens) {
         for (Alien alien : aliens) {
             if (aliens.indexOf(alien) % 2 == 0) {
@@ -311,9 +420,9 @@ public class Space extends World {
     }
 
     /**
-     * Zig zag like formation over the full width of the screen
+     * Zig Zag like formation over the full width of the screen
      *
-     * @param aliens ArrayList of aliens
+     * @param aliens The aliens to arrange.
      */
     private void alienFormation2(ArrayList<Alien> aliens) {
         for (Alien alien : aliens) {
@@ -331,7 +440,11 @@ public class Space extends World {
         }
     }
 
-    // Set the finalX and finalY of each alien, so it results in a grid formation regardless of the number of aliens
+    /**
+     * Generates a Grid formation.
+     *
+     * @param aliens The aliens to arrange.
+     */
     private void alienFormation3(ArrayList<Alien> aliens) {
         int alienWidth = aliens.get(0).getImage().getWidth();
         int alienHeight = aliens.get(0).getImage().getHeight();

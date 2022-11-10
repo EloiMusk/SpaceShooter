@@ -4,42 +4,118 @@ import greenfoot.Greenfoot;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * A spaceship that can be controlled by the user.
+ *
+ * @author EloiMusk
+ * @version 1.0
+ */
 public class SpaceShip extends Actor {
+    /**
+     * The current animation frame.
+     */
     private int animationFrame = 0;
+    /**
+     * The health of the spaceship.
+     */
     public int health = 3;
+    /**
+     * The shield of the spaceship.
+     */
     public int shield = 0;
+    /**
+     * The current ammunition of the spaceship.
+     */
     public int ammunition = 50;
+    /**
+     * The maximum ammunition of the spaceship.
+     */
     public int maxAmmunition = 40;
+    /**
+     * Whether the spaceship is currently firing.
+     */
     private boolean isShooting = false;
+    /**
+     * The movement speed of the spaceship.
+     */
     private int movementSpeed = 0;
+    /**
+     * The count of bullets fired at the same time.
+     */
     private int bulletCount = 1;
+    /**
+     * The speed boost of the bullets.
+     */
     private float bulletSpeedBoost = 1;
+    /**
+     * The damage boost of the bullets.
+     */
     private float bulletDamageBoost = 1;
+    /**
+     * The base bullet damage boost of the bullets.
+     */
     private int baseBulletDamageBoost;
+    /**
+     * The size boost of the bullets.
+     */
     private float bulletSizeBoost = 1;
+    /**
+     * The bullet type of the bullets.
+     */
     private int bulletType = 1;
+    /**
+     * The current state of the Bullet cool down.
+     */
     private int bulletCoolDown = 0;
+    /**
+     * Instance of the SoundService for the heartBreak sound.
+     */
     private final SoundService heartBreakSound = new SoundService("HeartBreak/1.wav");
+    /**
+     * Instance of the SoundService for the shieldBreak sound.
+     */
     private final SoundService shieldBreakSound = new SoundService("ShieldBreak/1.wav");
+    /**
+     * Instance of the SoundService for the powerUp sound.
+     */
     private final SoundService powerUpSound = new SoundService("PowerUp/1.wav");
+    /**
+     * Hashmap which stores all Upgrade types and if they are active.
+     */
     public Map<UpgradeType, Boolean> activeUpgrades = new HashMap<>();
+    /**
+     * Determines if the spaceship can currently shoot.
+     */
     boolean canShoot = true;
+    /**
+     * Counter to control the shooting speed.
+     */
     private int canShootDelay = 0;
 
+    /**
+     * Constructor for the SpaceShip class.
+     */
     public SpaceShip() {
         setImage("SpaceShip/SpaceShip0.png");
         getImage().scale(64, 64);
         init();
     }
 
+    /**
+     * Initializes the SpaceShip.
+     */
     private void init() {
         UpgradeType[] upgradeTypes = UpgradeType.values();
+//        Sets the values for the activeUpgrades hashmap.
         for (UpgradeType type :
                 upgradeTypes) {
             activeUpgrades.put(type, false);
         }
     }
 
+    /**
+     * Animates the spaceship by changing the image to the next frame.
+     */
     private void animation() {
         if (Space.animationMilliSeconds == 1) {
             if (animationFrame > 2) {
@@ -51,28 +127,35 @@ public class SpaceShip extends Actor {
         }
     }
 
+    /**
+     * Controls of the spaceship.
+     */
     public void controls() {
+//        Moves the spaceship to the left.
         if (Greenfoot.isKeyDown("a")) {
             if (getX() > 0) {
                 setLocation(getX() - (5 + movementSpeed), getY());
             }
         }
+//        Moves the spaceship to the right.
         if (Greenfoot.isKeyDown("d")) {
             if (getX() < getWorld().getWidth()) {
                 setLocation(getX() + (5 + movementSpeed), getY());
             }
         }
+//        Moves the spaceship up.
         if (Greenfoot.isKeyDown("w")) {
             if (getY() > 0) {
                 setLocation(getX(), getY() - (5 + movementSpeed));
             }
         }
+//        Moves the spaceship down.
         if (Greenfoot.isKeyDown("s")) {
             if (getY() < getWorld().getHeight()) {
                 setLocation(getX(), getY() + (5 + movementSpeed));
             }
         }
-//        TODO: Different shooting speed depending on bullet type
+//        Shoots a bullet if the spaceship is not currently shooting and the bullet is not on cool down.
         if (Greenfoot.isKeyDown("space") && !isShooting && canShoot) {
             if (this.ammunition > 0) {
                 for (int i = 0; i < this.bulletCount; i++) {
@@ -90,11 +173,15 @@ public class SpaceShip extends Actor {
                 new SoundService("Bullet/NoAmmo/1.wav").playSound();
             }
         }
+//        If space is not pressed, the spaceship is not shooting.
         if (!Greenfoot.isKeyDown("space") && isShooting) {
             isShooting = false;
         }
     }
 
+    /**
+     * Checks if the spaceship is colliding with an enemy. If so, the spaceship loses health.
+     */
     public void isHit() {
         if (isTouching(Alien.class)) {
             Alien alien = (Alien) getOneIntersectingObject(Alien.class);
@@ -133,6 +220,9 @@ public class SpaceShip extends Actor {
         }
     }
 
+    /**
+     * Plays the death animation of the spaceship.
+     */
     private void playDeathAnimation() {
         new SoundService("DeathExplosion/SpaceShip/1.wav").playSound();
         for (int i = 0; i <= 14; i++) {
@@ -142,6 +232,9 @@ public class SpaceShip extends Actor {
         }
     }
 
+    /**
+     * Checks if the spaceship is colliding with a power up. If so, the spaceship gains the power up.
+     */
     public void isHitByUpgrade() {
         if (isTouching(Upgrade.class)) {
             if (!powerUpSound.isPlaying()) {
@@ -219,6 +312,9 @@ public class SpaceShip extends Actor {
         }
     }
 
+    /**
+     * Resets the activeUpgrades HashMap so that all bullets are set to false.
+     */
     private void resetBulletType() {
         activeUpgrades.put(UpgradeType.ROCKET, false);
         activeUpgrades.put(UpgradeType.BOMB, false);
@@ -226,6 +322,9 @@ public class SpaceShip extends Actor {
         activeUpgrades.put(UpgradeType.NUKE, false);
     }
 
+    /**
+     * Cool down for the Upgrades and Bullets.
+     */
     private void coolDown() {
         if (Space.animationSeconds % (60 / 1.5) == 0) {
             if (this.ammunition < maxAmmunition) {

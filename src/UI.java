@@ -4,50 +4,41 @@ import greenfoot.GreenfootImage;
 
 import java.util.ArrayList;
 import java.util.Map;
-import java.util.Set;
 
+/**
+ * A simple UI class that is used to display the current stats to the player.
+ *
+ * @author EloiMusk
+ * @version 1.0
+ */
 public class UI extends Actor {
-
+    /**
+     * Current animation frame for the health bar.
+     */
     private int heartAnimationFrame = 0;
+    /**
+     * Current animation frame for the shield icon.
+     */
     private int shieldAnimationFrame = 0;
+    /**
+     * Current animation frame for the ammunition icon.
+     */
     private int ammunitionAnimationFrame = 0;
+    /**
+     * List of all currently active Upgrades.
+     */
     private ArrayList<UpgradeIcon> upgradeIcons = new ArrayList<UpgradeIcon>();
 
-    private GreenfootImage getHealthImage(int health) {
-        GreenfootImage healthImage = new GreenfootImage("UI/Health/" + health + "/" + heartAnimationFrame + ".png");
-        healthImage.scale(128, 32);
-        return healthImage;
+    /**
+     * Calls refreshUI() every cycle.
+     */
+    public void act() {
+        refreshUI();
     }
 
-    private GreenfootImage getShieldImage(int shield) {
-        GreenfootImage shieldImage;
-        if (shield <= 0) {
-            shieldImage = new GreenfootImage("UI/Shield/0/0.png");
-
-        } else {
-            shieldImage = new GreenfootImage("UI/Shield/" + shield + "/" + shieldAnimationFrame + ".png");
-        }
-        shieldImage.scale(96, 32);
-        return shieldImage;
-    }
-
-    private GreenfootImage getAmmunitionImage(int ammunition) {
-        GreenfootImage ammunitionImage;
-        if (ammunition <= 0) {
-            ammunitionImage = new GreenfootImage("UI/Ammunition/0/" + String.format("%02d", ammunitionAnimationFrame) + ".png");
-        } else if (ammunition <= 10) {
-            ammunitionImage = new GreenfootImage("UI/Ammunition/1/" + String.format("%02d", ammunitionAnimationFrame) + ".png");
-        } else if (ammunition <= 20) {
-            ammunitionImage = new GreenfootImage("UI/Ammunition/2/" + String.format("%02d", ammunitionAnimationFrame) + ".png");
-        } else if (ammunition <= 30) {
-            ammunitionImage = new GreenfootImage("UI/Ammunition/3/" + String.format("%02d", ammunitionAnimationFrame) + ".png");
-        } else {
-            ammunitionImage = new GreenfootImage("UI/Ammunition/4/" + String.format("%02d", ammunitionAnimationFrame) + ".png");
-        }
-        ammunitionImage.scale(32, 32);
-        return ammunitionImage;
-    }
-
+    /**
+     * Refreshes all the stats and icons of the HUD.
+     */
     public void refreshUI() {
         GreenfootImage bg = getImage();
         bg.scale(800, 600);
@@ -73,6 +64,9 @@ public class UI extends Actor {
         }
         int upgradeIconY = getWorld().getHeight() - 100;
         for (UpgradeIcon upgradeIcon : upgradeIcons) {
+            if (Space.animationSeconds % 2 == 0) {
+                upgradeIcon.nextFrame();
+            }
             bg.drawImage(upgradeIcon, getWorld().getWidth() - upgradeIcon.getWidth(), upgradeIconY);
             upgradeIconY -= upgradeIcon.getHeight() + 10;
         }
@@ -95,8 +89,57 @@ public class UI extends Actor {
         }
     }
 
-    public void act() {
-        refreshUI();
+    /**
+     * Gets the current health bar image.
+     *
+     * @param health The current health of the player.
+     * @return The current health bar image.
+     */
+    private GreenfootImage getHealthImage(int health) {
+        GreenfootImage healthImage = new GreenfootImage("UI/Health/" + health + "/" + heartAnimationFrame + ".png");
+        healthImage.scale(128, 32);
+        return healthImage;
+    }
+
+    /**
+     * Gets the current shield icon image.
+     *
+     * @param shield The current shield of the player.
+     * @return The current shield icon image.
+     */
+    private GreenfootImage getShieldImage(int shield) {
+        GreenfootImage shieldImage;
+        if (shield <= 0) {
+            shieldImage = new GreenfootImage("UI/Shield/0/0.png");
+
+        } else {
+            shieldImage = new GreenfootImage("UI/Shield/" + shield + "/" + shieldAnimationFrame + ".png");
+        }
+        shieldImage.scale(96, 32);
+        return shieldImage;
+    }
+
+    /**
+     * Gets the current ammunition icon image.
+     *
+     * @param ammunition The current ammunition of the player.
+     * @return The current ammunition icon image.
+     */
+    private GreenfootImage getAmmunitionImage(int ammunition) {
+        GreenfootImage ammunitionImage;
+        if (ammunition <= 0) {
+            ammunitionImage = new GreenfootImage("UI/Ammunition/0/" + String.format("%02d", ammunitionAnimationFrame) + ".png");
+        } else if (ammunition <= 10) {
+            ammunitionImage = new GreenfootImage("UI/Ammunition/1/" + String.format("%02d", ammunitionAnimationFrame) + ".png");
+        } else if (ammunition <= 20) {
+            ammunitionImage = new GreenfootImage("UI/Ammunition/2/" + String.format("%02d", ammunitionAnimationFrame) + ".png");
+        } else if (ammunition <= 30) {
+            ammunitionImage = new GreenfootImage("UI/Ammunition/3/" + String.format("%02d", ammunitionAnimationFrame) + ".png");
+        } else {
+            ammunitionImage = new GreenfootImage("UI/Ammunition/4/" + String.format("%02d", ammunitionAnimationFrame) + ".png");
+        }
+        ammunitionImage.scale(32, 32);
+        return ammunitionImage;
     }
 
 }

@@ -1,22 +1,74 @@
 import greenfoot.*;
 import greenfoot.Color;
 
+/**
+ * World for the main menu.
+ *
+ * @author EloiMusk
+ * @version 1.0
+ */
 public class Menu extends World {
+    /**
+     * The leaderboard component.
+     */
     LeaderBoardComponent leaderboard;
+    /**
+     * The gameStart variable.
+     */
     GameState gameState;
 
+    /**
+     * Constructor for the menu without a given game state.
+     */
     public Menu() {
         super(800, 600, 1);
         this.gameState = GameState.GAME_START;
         init();
     }
 
+    /**
+     * Constructor for the menu with a given game state.
+     *
+     * @param gameState The game state.
+     */
     public Menu(GameState gameState) {
         super(800, 600, 1);
         this.gameState = gameState;
         init();
     }
 
+    /**
+     * Checks if enter is pressed and starts the game.
+     */
+    public void act() {
+        if (Greenfoot.isKeyDown("enter")) {
+            onClick();
+        }
+    }
+
+    /**
+     * Initializes the menu and determines the game state and what to do.
+     */
+    private void init() {
+        switch (gameState) {
+            case GAME_OVER:
+                generateGameOver();
+                break;
+            case GAME_WON:
+                break;
+            case GAME_PAUSED:
+                break;
+            case GAME_RUNNING:
+                break;
+            case GAME_START:
+                generateGameStart();
+                break;
+        }
+    }
+
+    /**
+     * Generates the game over menu.
+     */
     private void generateGameOver() {
         GreenfootImage bg = getBackground();
         int x = bg.getWidth() / 2;
@@ -40,6 +92,9 @@ public class Menu extends World {
         addObject(leaderboard, (getWidth() / 6) * 5, getHeight() / 2);
     }
 
+    /**
+     * Generates the game start menu.
+     */
     private void generateGameStart() {
         GreenfootImage bg = getBackground();
         int x = bg.getWidth() / 2;
@@ -58,38 +113,26 @@ public class Menu extends World {
         addObject(leaderboard, (getWidth() / 6) * 5, getHeight() / 2);
     }
 
-    private void init() {
-        switch (gameState) {
-            case GAME_OVER:
-                generateGameOver();
-                break;
-            case GAME_WON:
-                break;
-            case GAME_PAUSED:
-                break;
-            case GAME_RUNNING:
-                break;
-            case GAME_START:
-                generateGameStart();
-                break;
-        }
-    }
-
-    private void onClick() {
-        Greenfoot.setWorld(new Space());
-    }
-
-    private void clearAll() {
-        removeObjects(getObjects(null));
-        getBackground().clear();
-    }
-
+    /**
+     * Refreshes the leaderboard.
+     */
     public void refresh() {
         leaderboard.refresh();
         clearAll();
         init();
     }
 
+    /**
+     * Clears all objects from the world.
+     */
+    private void clearAll() {
+        removeObjects(getObjects(null));
+        getBackground().clear();
+    }
+
+    /**
+     * Adds a score to the leaderboard.
+     */
     private void addScore() {
         String name = Greenfoot.ask("Enter your name");
         if (name != null) {
@@ -102,9 +145,10 @@ public class Menu extends World {
         }
     }
 
-    public void act() {
-        if (Greenfoot.isKeyDown("enter")) {
-            onClick();
-        }
+    /**
+     * Click callback. Starts the game.
+     */
+    private void onClick() {
+        Greenfoot.setWorld(new Space());
     }
 }

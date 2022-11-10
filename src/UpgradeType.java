@@ -1,3 +1,9 @@
+/**
+ * Enum representing the different upgrade types in the game.
+ *
+ * @author EloiMusk
+ * @version 1.0
+ */
 public enum UpgradeType {
     HEALTH,
     SHIELD,
