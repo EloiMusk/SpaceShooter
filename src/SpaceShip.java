@@ -348,19 +348,19 @@ public class SpaceShip extends Actor {
             }
             if (bulletSpeedBoost > 1) {
                 bulletSpeedBoost -= (float) 1 / 3;
-                System.out.println("Bullet speed reduced: " + bulletSpeedBoost);
+//                System.out.println("Bullet speed reduced: " + bulletSpeedBoost);
             } else {
                 activeUpgrades.put(UpgradeType.BULLET_SPEED, false);
             }
             if (bulletDamageBoost > baseBulletDamageBoost) {
                 bulletDamageBoost -= 10;
-                System.out.println("Bullet damage reduced: " + bulletDamageBoost);
+//                System.out.println("Bullet damage reduced: " + bulletDamageBoost);
             } else {
                 activeUpgrades.put(UpgradeType.BULLET_DAMAGE, false);
             }
             if (bulletSizeBoost > 1) {
                 bulletSizeBoost -= (float) 1 / 3;
-                System.out.println("Bullet size reduced: " + bulletSizeBoost);
+//                System.out.println("Bullet size reduced: " + bulletSizeBoost);
             } else {
                 activeUpgrades.put(UpgradeType.BULLET_SIZE, false);
             }
