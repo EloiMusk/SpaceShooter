@@ -3,6 +3,7 @@
 [![GitHub release (latest by date)](https://img.shields.io/github/v/release/EloiMusk/SpaceShooter)](https://github.com/EloiMusk/SpaceShooter/releases/latest) [![GitHub release (latest by date and asset)](https://img.shields.io/github/downloads/EloiMusk/SpaceShooter/latest/SpaceShooter.gfar)](https://github.com/EloiMusk/SpaceShooter/releases/latest/download/SpaceShooter.gfar)
 
 The game is still under development. Feel free to contribute or try it out. To see how you can set it up locally, please see the [Setup](#Setup) chapter.
+Or you can play it online: [Greenfoot Gallery - https://www.greenfoot.org/scenarios/30258?js=true](https://www.greenfoot.org/scenarios/30258?js=true)
 
 # Introduction
 Space Shooter is a 2D game, in which the player, playing as a heavily armed spaceship, has to defeat waves of aliens. 
