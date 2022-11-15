@@ -138,10 +138,10 @@ public class Bullet extends Actor {
     private void init() {
         bulletSound.volumeOffset = BulletData.bullets[bulletType - 1].blastVolumeOffset;
         if (isPlayerBullet) {
-            bulletSound.playSound("Bullet/" + bulletType + "/blast/" + (Greenfoot.getRandomNumber(3) + 1) + ".wav");
-            explosionSound.setSound("Bullet/" + bulletType + "/explosion/1.wav");
+            bulletSound.playSound("Bullet/" + bulletType + "/blast/" + (Greenfoot.getRandomNumber(3) + 1) + ".mp3");
+            explosionSound.setSound("Bullet/" + bulletType + "/explosion/1.mp3");
         } else {
-            bulletSound.playSound("Alien/blast/" + (Greenfoot.getRandomNumber(3) + 1) + ".wav");
+            bulletSound.playSound("Alien/blast/" + (Greenfoot.getRandomNumber(3) + 1) + ".mp3");
         }
         setRotation(-90);
         damage = (int) (BulletData.bullets[bulletType - 1].damage / damageBoost);
